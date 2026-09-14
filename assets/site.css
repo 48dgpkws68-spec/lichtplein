@@ -355,3 +355,12 @@ html,body{overflow-x:hidden}
 [hidden]{display:none!important}
 .hero .frame>*,.grid>*,.series>*,.serie-list>*,.tiles>*,.split>*{min-width:0}
 .hcard .shot img{width:100%;height:100%;object-fit:contain}
+/* mobiel: productpagina, offerte, menu-zoekveld */
+.pdp>*,.details>*{min-width:0}
+.pricebox table{table-layout:fixed}
+.pricebox th,.pricebox td{white-space:normal}
+.split-q{align-items:start;grid-template-columns:1fr 400px}
+@media (max-width:900px){.split-q{grid-template-columns:1fr}}
+.search-m{display:block;flex:none;margin:0 0 .8rem}
+.search-m .results{max-height:50vh}
+@media (max-width:640px){.hcard .cap{font-size:11px}.hero .facts b{font-size:1.1rem}.card .name{font-size:13px}.qty button{width:44px;height:44px}.btn{padding:.85rem 1.2rem}.fbottom{flex-direction:column;align-items:flex-start}}
