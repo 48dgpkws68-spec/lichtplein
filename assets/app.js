@@ -1,11 +1,13 @@
 /* Lichtplein: navigatie, zoeken, offertelijst, filters, productpagina. Geen frameworks. */
 (function () {
   "use strict";
-  var LANG = document.documentElement.lang === "en" ? "en" : "nl";
-  var P = LANG === "en" ? "/en" : "";
+  var LANG = { en: "en", de: "de" }[document.documentElement.lang] || "nl";
+  var P = { en: "/en", de: "/de" }[LANG] || "";
+  var LOC = { nl: "nl-NL", en: "en-GB", de: "de-DE" }[LANG];
   var T = {
     nl: { added: "Toegevoegd aan offerte", none: "Geen resultaten", each: "per stuk", set: "per set", req: "op aanvraag", results: "resultaten", empty: "Uw offertelijst is nog leeg", rm: "Verwijder" },
-    en: { added: "Added to quote", none: "No results", each: "each", set: "per set", req: "on request", results: "results", empty: "Your quote list is still empty", rm: "Remove" }
+    en: { added: "Added to quote", none: "No results", each: "each", set: "per set", req: "on request", results: "results", empty: "Your quote list is still empty", rm: "Remove" },
+    de: { added: "Zum Angebot hinzugefügt", none: "Keine Ergebnisse", each: "je Stück", set: "je Set", req: "auf Anfrage", results: "Ergebnisse", empty: "Ihre Angebotsliste ist noch leer", rm: "Entfernen" }
   }[LANG];
   var KEY = "lp-offerte";
   var VARIANTS = window.LP_VARIANTS || {};
@@ -13,7 +15,7 @@
 
   function $(s, r) { return (r || document).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
-  function eur(v) { return v == null ? T.req : new Intl.NumberFormat("nl-NL", { style: "currency", currency: "EUR" }).format(v); }
+  function eur(v) { return v == null ? T.req : new Intl.NumberFormat(LOC, { style: "currency", currency: "EUR" }).format(v); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
   /* ---- offertelijst (localStorage) ---- */
@@ -40,14 +42,14 @@
     if (!loading) loading = fetch("/data/zoek.json").then(function (r) { return r.json(); }).then(function (d) { INDEX = d; return d; });
     return loading;
   }
-  function name(p) { return LANG === "en" && p.en ? p.en : p.nl; }
+  function name(p) { return (LANG !== "nl" && p[LANG]) ? p[LANG] : p.nl; }
   function url(p) { return P + "/product/" + p.sku.toLowerCase() + "/"; }
   function search(q, items, limit) {
     var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
     if (!terms.length) return [];
     var out = [];
     for (var i = 0; i < items.length && out.length < limit; i++) {
-      var p = items[i], hay = (p.sku + " " + p.nl + " " + (p.en || "") + " " + p.s + " " + p.g + " " + (p.f || "")).toLowerCase();
+      var p = items[i], hay = (p.sku + " " + p.nl + " " + (p.en || "") + " " + (p.de || "") + " " + p.s + " " + p.g + " " + (p.f || "")).toLowerCase();
       var ok = true;
       for (var j = 0; j < terms.length; j++) if (hay.indexOf(terms[j]) < 0) { ok = false; break; }
       if (ok) out.push(p);
@@ -170,7 +172,7 @@
         }).join("");
         tot.textContent = eur(total);
         if (hidden) hidden.value = lines.join("\n");
-        if (totIn) totIn.value = eur(total) + " excl. btw";
+        if (totIn) totIn.value = eur(total) + ({ nl: " excl. btw", en: " excl. VAT", de: " zzgl. MwSt." }[LANG]);
         var ids = rows.filter(function (i) { return VARIANTS[i.sku]; }).map(function (i) { return VARIANTS[i.sku] + ":" + i.qty; });
         var co = $("#q-checkout"); if (co) { co.hidden = !ids.length; co.href = "https://" + SHOP + "/cart/" + ids.join(","); }
         $$("input[data-sku]", list).forEach(function (inp) { inp.addEventListener("change", function () { var v = Math.max(1, parseInt(inp.value, 10) || 1); writeQ(readQ().map(function (x) { return x.sku === inp.getAttribute("data-sku") ? { sku: x.sku, qty: v } : x; })); draw(); }); });
@@ -227,7 +229,7 @@
   /* ---- teller ---- */
   $$("[data-count]").forEach(function (el) {
     var to = parseInt(el.getAttribute("data-count"), 10), suf = el.getAttribute("data-suffix") || "", t0 = null;
-    var tick = function (ts) { if (!t0) t0 = ts; var k = Math.min(1, (ts - t0) / 1400); var v = Math.round(to * (1 - Math.pow(1 - k, 3))); el.textContent = v.toLocaleString(LANG === "en" ? "en-GB" : "nl-NL") + suf; if (k < 1) requestAnimationFrame(tick); };
+    var tick = function (ts) { if (!t0) t0 = ts; var k = Math.min(1, (ts - t0) / 1400); var v = Math.round(to * (1 - Math.pow(1 - k, 3))); el.textContent = v.toLocaleString(LOC) + suf; if (k < 1) requestAnimationFrame(tick); };
     if ("IntersectionObserver" in window) { var o = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { requestAnimationFrame(tick); o.disconnect(); } }); o.observe(el); } else el.textContent = to + suf;
   });
 })();
