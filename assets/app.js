@@ -51,18 +51,61 @@
   function miniHtml(p, qty) {
     return '<div class="mini" data-sku="' + p.sku + '" data-moq="' + p.m + '"><a class="shot" href="' + url(p) + '">' + (p.i ? '<img src="/img/p/' + p.i + '" alt="" loading="lazy" width="120" height="120">' : "") + '</a><div class="mb"><a class="name" href="' + url(p) + '">' + esc(name(p)) + '</a><div class="pr">' + (p.p != null ? eur(p.p) + " <small>" + (p.u === "set" ? T.set : T.each) + "</small>" : T.req) + '</div></div><button class="btn btn-sm add-bundle" type="button" data-sku="' + p.sku + '" data-qty="' + (qty || p.m) + '">' + T.add + "</button></div>";
   }
-  function search(q, items, limit) {
-    var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
-    if (!terms.length) return [];
-    var out = [];
-    for (var i = 0; i < items.length && out.length < limit; i++) {
-      var p = items[i]; if (p.h) continue;
-      var hay = (p.sku + " " + p.nl + " " + (p.en || "") + " " + (p.de || "") + " " + p.s + " " + p.g + " " + (p.f || "") + " " + (p.k || "") + (p.a ? " " + T.art : "") + (p.o ? " outlet" : "")).toLowerCase();
-      var ok = true;
-      for (var j = 0; j < terms.length; j++) if (hay.indexOf(terms[j]) < 0) { ok = false; break; }
-      if (ok) out.push(p);
+  /* zoeken: tolerant voor typefouten (prefix, 1 of 2 letters fout), families eerst */
+  function fold(s) { return String(s).toLowerCase().replace(/[éèë]/g, "e").replace(/[üû]/g, "u").replace(/ö/g, "o").replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, " ").trim(); }
+  function lev(a, b, max) {
+    if (Math.abs(a.length - b.length) > max) return max + 1;
+    var prev = [], cur = [], i, j;
+    for (j = 0; j <= b.length; j++) prev[j] = j;
+    for (i = 1; i <= a.length; i++) {
+      cur[0] = i; var best = cur[0];
+      for (j = 1; j <= b.length; j++) { cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); if (cur[j] < best) best = cur[j]; }
+      if (best > max) return max + 1;
+      prev = cur.slice();
     }
-    return out;
+    return prev[b.length];
+  }
+  function hayOf(p) {
+    if (!p._h) { p._h = fold(p.sku + " " + p.nl + " " + (p.en || "") + " " + (p.de || "") + " " + p.s + " " + p.g + " " + (p.f || "") + " " + (p.k || "") + (p.a ? " " + T.art : "") + (p.o ? " outlet" : "")); p._w = p._h.split(" "); }
+    return p._h;
+  }
+  function termScore(p, t) {
+    var hay = hayOf(p);
+    if (hay.indexOf(t) >= 0) return 3;
+    var w = p._w, max = t.length >= 7 ? 2 : t.length >= 4 ? 1 : 0, best = 0;
+    for (var i = 0; i < w.length; i++) {
+      if (w[i].indexOf(t) === 0) return 2;
+      if (max && (w[i].length >= 3 && lev(t, w[i], max) <= max || t.length >= 5 && w[i].length > t.length && lev(t, w[i].slice(0, t.length), max) <= max)) { var k = 0; while (k < t.length && t[k] === w[i][k]) k++; best = Math.max(best, 1 + k * 0.1); }
+    }
+    return best;
+  }
+  function search(q, items, limit) {
+    var terms = fold(q).split(" ").filter(Boolean);
+    if (!terms.length) return [];
+    var hits = [];
+    for (var i = 0; i < items.length; i++) {
+      var p = items[i]; if (p.h) continue;
+      var score = 0, ok = true;
+      for (var j = 0; j < terms.length; j++) { var sc = termScore(p, terms[j]); if (!sc) { ok = false; break; } score += sc; }
+      if (ok) hits.push({ p: p, s: score + (p.fam ? 0.5 : 0) + (p.a ? -1 : 0) });
+    }
+    hits.sort(function (a, b) { return b.s - a.s; });
+    return hits.slice(0, limit).map(function (h) { return h.p; });
+  }
+  function suggest(q, items) {
+    var terms = fold(q).split(" ").filter(Boolean), vocab = {}, out = [];
+    items.forEach(function (p) { if (p.h || p.a) return; hayOf(p); p._w.forEach(function (w) { if (w.length >= 4 && !/^\d/.test(w) && !/^lp-/.test(w)) vocab[w] = (vocab[w] || 0) + 1; }); });
+    terms.forEach(function (t) {
+      if (t.length < 3) return;
+      var best = Object.keys(vocab).filter(function (w) { return lev(t, w, 2) <= 2 || (w.indexOf(t) === 0); }).sort(function (a, b) { return (lev(t, a, 3) - lev(t, b, 3)) || (vocab[b] - vocab[a]); }).slice(0, 3);
+      best.forEach(function (w) { if (out.indexOf(w) < 0) out.push(w); });
+    });
+    return out.slice(0, 4);
+  }
+  var POP = { nl: ["LED paneel 60x60", "UFO hallenlamp", "Straatlamp", "Schijnwerper", "Lichtmast", "Waterdichte TL-armatuur", "Stopcontact", "Outlet"], en: ["LED panel 60x60", "UFO high bay", "Street light", "Floodlight", "Lighting column", "Waterproof batten", "Socket outlet", "Outlet"], de: ["LED-Panel 60x60", "UFO-Hallenleuchte", "Straßenleuchte", "Flutlichtstrahler", "Lichtmast", "Feuchtraumleuchte", "Steckdose", "Outlet"] }[LANG];
+  function noneHtml(q, items, cls) {
+    var sug = suggest(q, items), T2 = { nl: ["Geen resultaten voor", "Bedoelde u", "Populair"], en: ["No results for", "Did you mean", "Popular"], de: ["Keine Ergebnisse für", "Meinten Sie", "Beliebt"] }[LANG];
+    return '<div class="' + (cls || "none") + '"><b>' + T2[0] + ' “' + esc(q) + '”</b>' + (sug.length ? '<div class="sug">' + T2[1] + ': ' + sug.map(function (w) { return '<a href="#" data-q="' + esc(w) + '">' + esc(w) + "</a>"; }).join(" ") + "</div>" : "") + '<div class="sug">' + T2[2] + ': ' + POP.map(function (w) { return '<a href="#" data-q="' + esc(w) + '">' + esc(w) + "</a>"; }).join(" ") + "</div></div>";
   }
   function row(p) {
     if (p.a) return '<a href="' + url(p) + '"><img src="' + (p.i ? "/img/p/" + p.i : "/img/blank.svg") + '" alt="" loading="lazy"><span>' + esc(name(p)) + '<small>' + T.art + (p.s ? " · " + esc(p.s) : "") + '</small></span><span class="price">&rarr;</span></a>';
@@ -75,8 +118,9 @@
       if (q.length < 2) { res.classList.remove("open"); return; }
       index().then(function (items) {
         var hits = search(q, items, 12);
-        res.innerHTML = hits.length ? hits.map(row).join("") : '<div class="none">' + T.none + "</div>";
+        res.innerHTML = hits.length ? hits.map(row).join("") : noneHtml(q, items);
         res.classList.add("open");
+        $$("a[data-q]", res).forEach(function (a) { a.addEventListener("click", function (e) { e.preventDefault(); inp.value = a.getAttribute("data-q"); run(); }); });
       });
     };
     inp.addEventListener("input", run);
@@ -98,10 +142,12 @@
         var hits = search(v, items, 60);
         all.hidden = false;
         $("#zoek-aantal").textContent = hits.length + " " + T.results;
-        out2.innerHTML = hits.length ? hits.filter(function (p) { return !p.a; }).map(function (p) { return card(p); }).join("") : '<div class="empty">' + T.none + "</div>";
+        out2.innerHTML = hits.length ? hits.filter(function (p) { return !p.a; }).map(function (p) { return card(p); }).join("") : noneHtml(v, items, "empty");
+        $$("a[data-q]", out2).forEach(function (a) { a.addEventListener("click", function (e) { e.preventDefault(); inp2.value = a.getAttribute("data-q"); render(); }); });
       });
     };
     inp2.addEventListener("input", render);
+    $$("#zoek-populair a").forEach(function (a) { a.addEventListener("click", function (e) { e.preventDefault(); inp2.value = a.getAttribute("data-q"); render(); inp2.focus(); }); });
     render();
     if (q) inp2.focus();
   }

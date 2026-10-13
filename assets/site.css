@@ -529,3 +529,16 @@ table.snel td:first-child{width:auto}
 .outlet-note{font-size:13px;color:var(--mute);padding:.7rem 1rem;border-top:1px solid var(--hair)}
 .card.is-outlet .foot .price{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15}
 .card.is-outlet .foot .price s{font-size:12px;margin:0}
+/* zoeken: breed uitklappanel, altijd leesbaar (13 okt 2026) */
+.search{flex:0 1 320px;min-width:200px}
+.search .results{left:auto;right:0;width:min(560px,92vw);max-height:60vh}
+.search-m .results,.hero-search .results{left:0;right:0;width:auto}
+.results .none b{display:block;color:#fff;margin-bottom:.4rem}
+.results .sug,.empty .sug{margin-top:.5rem;font-size:13px;color:var(--mute);line-height:1.9}
+.results .sug a,.empty .sug a,.pop a{display:inline-block;margin:0 .25rem .25rem 0;padding:.15rem .6rem;border:1px solid var(--hair);border-radius:999px;color:var(--ink2);font-size:13px}
+.results .sug a:hover,.empty .sug a:hover,.pop a:hover{border-color:var(--neon);color:#fff}
+.empty b{display:block;color:#fff;margin-bottom:.3rem}
+.pop{display:flex;flex-wrap:wrap;align-items:center;gap:.2rem;margin:.7rem 0 0;font-size:13px;color:var(--mute)}
+.pop span{margin-right:.4rem}
+@media (max-width:1400px){.nav{gap:.85rem;margin-left:.8rem;font-size:13.5px}}
+@media (max-width:1240px){.nav{gap:.7rem;font-size:13px}.search{flex:0 1 240px;min-width:170px}}
