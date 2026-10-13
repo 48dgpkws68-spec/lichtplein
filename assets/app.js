@@ -5,9 +5,9 @@
   var P = { en: "/en", de: "/de" }[LANG] || "";
   var LOC = "nl-NL";
   var T = {
-    nl: { added: "Toegevoegd aan offerte", none: "Geen resultaten", each: "per stuk", set: "per set", req: "op aanvraag", results: "resultaten", empty: "Uw offertelijst is nog leeg", rm: "Verwijder", art: "Kennisbank", proj: "projectprijs op aanvraag", unknown: "onbekend artikelnummer", min: "min.", added_n: "artikelen toegevoegd aan uw offerte", note: "Graag een projectprijs voor de aantallen in deze lijst.", add: "+ Toevoegen" },
-    en: { added: "Added to quote", none: "No results", each: "each", set: "per set", req: "on request", results: "results", empty: "Your quote list is still empty", rm: "Remove", art: "Knowledge base", proj: "project price on request", unknown: "unknown item number", min: "min.", added_n: "items added to your quote", note: "Please quote a project price for the quantities in this list.", add: "+ Add" },
-    de: { added: "Zum Angebot hinzugefügt", none: "Keine Ergebnisse", each: "je Stück", set: "je Set", req: "auf Anfrage", results: "Ergebnisse", empty: "Ihre Angebotsliste ist noch leer", rm: "Entfernen", art: "Wissen", proj: "Projektpreis auf Anfrage", unknown: "unbekannte Artikelnummer", min: "mind.", added_n: "Artikel zum Angebot hinzugefügt", note: "Bitte einen Projektpreis für die Mengen in dieser Liste.", add: "+ Hinzufügen" }
+    nl: { added: "Toegevoegd aan offerte", none: "Geen resultaten", each: "per stuk", set: "per set", req: "op aanvraag", results: "resultaten", empty: "Uw offertelijst is nog leeg", rm: "Verwijder", art: "Kennisbank", proj: "projectprijs op aanvraag", versions: "uitvoeringen", from: "vanaf", unknown: "onbekend artikelnummer", min: "min.", added_n: "artikelen toegevoegd aan uw offerte", note: "Graag een projectprijs voor de aantallen in deze lijst.", add: "+ Toevoegen" },
+    en: { added: "Added to quote", none: "No results", each: "each", set: "per set", req: "on request", results: "results", empty: "Your quote list is still empty", rm: "Remove", art: "Knowledge base", proj: "project price on request", versions: "versions", from: "from", unknown: "unknown item number", min: "min.", added_n: "items added to your quote", note: "Please quote a project price for the quantities in this list.", add: "+ Add" },
+    de: { added: "Zum Angebot hinzugefügt", none: "Keine Ergebnisse", each: "je Stück", set: "je Set", req: "auf Anfrage", results: "Ergebnisse", empty: "Ihre Angebotsliste ist noch leer", rm: "Entfernen", art: "Wissen", proj: "Projektpreis auf Anfrage", versions: "Ausführungen", from: "ab", unknown: "unbekannte Artikelnummer", min: "mind.", added_n: "Artikel zum Angebot hinzugefügt", note: "Bitte einen Projektpreis für die Mengen in dieser Liste.", add: "+ Hinzufügen" }
   }[LANG];
   var KEY = "lp-offerte";
   var VARIANTS = window.LP_VARIANTS || {};
@@ -45,7 +45,7 @@
     return loading;
   }
   function name(p) { return (LANG !== "nl" && p[LANG]) ? p[LANG] : p.nl; }
-  function url(p) { return p.a ? P + "/kennis/" + p.a + "/" : P + "/product/" + p.sku.toLowerCase() + "/"; }
+  function url(p) { if (p.a) return P + "/kennis/" + p.a + "/"; if (p.fam) return P + "/product/" + p.fam + "/"; if (p.l) return P + "/product/" + p.l + "/?v=" + p.sku; return P + "/product/" + p.sku.toLowerCase() + "/"; }
   function isMast(p) { return p.s === "TURRIS" || (p.s === "CIVIS" && /mast/i.test(p.nl)); }
   function byIndex(cb) { index().then(function (idx) { var by = {}; idx.forEach(function (p) { if (p.sku) by[p.sku] = p; }); cb(by, idx); }); }
   function miniHtml(p, qty) {
@@ -56,7 +56,8 @@
     if (!terms.length) return [];
     var out = [];
     for (var i = 0; i < items.length && out.length < limit; i++) {
-      var p = items[i], hay = (p.sku + " " + p.nl + " " + (p.en || "") + " " + (p.de || "") + " " + p.s + " " + p.g + " " + (p.f || "") + (p.a ? " " + T.art : "")).toLowerCase();
+      var p = items[i]; if (p.h) continue;
+      var hay = (p.sku + " " + p.nl + " " + (p.en || "") + " " + (p.de || "") + " " + p.s + " " + p.g + " " + (p.f || "") + " " + (p.k || "") + (p.a ? " " + T.art : "") + (p.o ? " outlet" : "")).toLowerCase();
       var ok = true;
       for (var j = 0; j < terms.length; j++) if (hay.indexOf(terms[j]) < 0) { ok = false; break; }
       if (ok) out.push(p);
@@ -65,7 +66,7 @@
   }
   function row(p) {
     if (p.a) return '<a href="' + url(p) + '"><img src="' + (p.i ? "/img/p/" + p.i : "/img/blank.svg") + '" alt="" loading="lazy"><span>' + esc(name(p)) + '<small>' + T.art + (p.s ? " · " + esc(p.s) : "") + '</small></span><span class="price">&rarr;</span></a>';
-    return '<a href="' + url(p) + '"><img src="' + (p.i ? "/img/p/" + p.i : "/img/blank.svg") + '" alt="" loading="lazy"><span>' + esc(name(p)) + '<small>' + esc(p.s) + " · " + esc(p.sku) + '</small></span><span class="price">' + (p.p != null ? eur(p.p) : T.req) + "</span></a>";
+    return '<a href="' + url(p) + '"><img src="' + (p.i ? "/img/p/" + p.i : "/img/blank.svg") + '" alt="" loading="lazy"><span>' + esc(name(p)) + '<small>' + esc(p.s) + " · " + (p.sku ? esc(p.sku) : p.n + " " + T.versions) + '</small></span><span class="price">' + (p.p != null ? (p.fam ? T.from + " " : "") + eur(p.p) : T.req) + "</span></a>";
   }
   $$(".search").forEach(function (box) {
     var inp = $("input", box), res = document.createElement("div"); res.className = "results"; box.appendChild(res);
@@ -105,7 +106,7 @@
     if (q) inp2.focus();
   }
   function card(p) {
-    return '<a class="card" href="' + url(p) + '"><div class="shot">' + (p.i ? '<img src="/img/p/' + p.i + '" alt="" loading="lazy" width="480" height="480">' : '<span class="none">' + esc(p.s) + "</span>") + '<span class="tag">' + esc(p.s) + '</span></div><div class="body"><div class="name">' + esc(name(p)) + '</div><div class="foot"><div><div class="from">' + esc(p.g) + '</div><div class="price">' + (p.p != null ? eur(p.p) : T.req) + "</div></div></div></div></a>";
+    return '<a class="card' + (p.o ? " is-outlet" : "") + '" href="' + url(p) + '"><div class="shot">' + (p.i ? '<img src="/img/p/' + p.i + '" alt="" loading="lazy" width="480" height="480">' : '<span class="none">' + esc(p.s) + "</span>") + (p.o ? '<span class="tag tag-outlet">OUTLET</span>' : '<span class="tag">' + esc(p.s) + '</span>') + '</div><div class="body"><div class="name">' + esc(name(p)) + '</div>' + (p.fam ? '<div class="chips"><span class="chip chip-n">' + p.n + " " + T.versions + '</span></div>' : "") + '<div class="foot"><div><div class="from">' + (p.fam ? T.from : esc(p.g)) + '</div><div class="price">' + (p.p != null ? eur(p.p) : T.req) + "</div></div></div></div></a>";
   }
 
   /* ---- seriepagina: filters ---- */
@@ -120,7 +121,7 @@
       var shown = 0;
       cards.forEach(function (c) {
         var ok = true;
-        Object.keys(active).forEach(function (k) { var v = c.getAttribute("data-" + k) || ""; if (active[k].indexOf(v) < 0) ok = false; });
+        Object.keys(active).forEach(function (k) { var vs = (c.getAttribute("data-" + k) || "").split(" "); if (!active[k].some(function (a) { return vs.indexOf(a) >= 0; })) ok = false; });
         if (ok && t && (c.getAttribute("data-zoek") || "").indexOf(t) < 0) ok = false;
         c.style.display = ok ? "" : "none";
         if (ok) shown++;
@@ -154,20 +155,76 @@
     var minus = $("#min"), plus = $("#plus");
     if (minus) minus.addEventListener("click", function () { qty = Math.max(moq, qty - step); upd(); });
     if (plus) plus.addEventListener("click", function () { qty += step; upd(); });
-    out.addEventListener("change", function () { var v = norm(out.value, moq); if (packEl) packEl.hidden = !(moq > 1 && v !== parseInt(out.value, 10)); qty = v; upd(); });
+    out.addEventListener("change", function () { var v = norm(out.value, moq); if (packEl) packEl.hidden = moq <= 1; qty = v; upd(); });
     out.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); out.blur(); } });
     var add = $("#add"); if (add) add.addEventListener("click", function () { addQ(sku, qty); });
     var quick = $("#quick"); if (quick) quick.addEventListener("click", function () { addQ(sku, qty); location.href = P + "/offerte/"; });
     document.body.classList.add("has-sticky");
     var go = $("#upsell-go"); if (go) go.addEventListener("click", function () { addQ(sku, qty); location.href = P + "/offerte/?project=1"; });
     var pr = $("#print"); if (pr) pr.addEventListener("click", function () { window.print(); });
+    /* varianten (productfamilie) */
+    var FAMD = window.LP_FAM, curV = null;
+    if (FAMD && FAMD.v && FAMD.v.length) {
+      var bySku = {}; FAMD.v.forEach(function (v) { bySku[v.sku] = v; });
+      var matches = function (v, sel, skip) { return FAMD.keys.every(function (k) { return k === skip || sel[k] == null || v.o[k] === sel[k]; }); };
+      var pick = function (sel) {
+        var best = null, score = -1;
+        FAMD.v.forEach(function (v) { var n = 0; FAMD.keys.forEach(function (k) { if (sel[k] != null && v.o[k] === sel[k]) n++; }); if (n > score) { score = n; best = v; } });
+        return best;
+      };
+      var setV = function (v, push) {
+        curV = v; sku = v.sku; price = v.p == null ? NaN : v.p; moq = v.m || 1; step = moq > 1 ? moq : 1; qty = moq;
+        pdp.setAttribute("data-product", sku);
+        var nm = $("#p-name"); if (nm) nm.textContent = v.name;
+        var sk = $("#p-sku"); if (sk) sk.textContent = v.sku;
+        var t1 = $("#p-tier1"); if (t1) t1.textContent = v.p != null ? eur(v.p) : T.req;
+        var rg = $("#p-reg"); if (rg) rg.textContent = v.reg != null ? eur(v.reg) : "";
+        var l1 = $("#lab1"); if (l1) l1.textContent = l1.textContent.replace(/^\d+/, String(moq));
+        if (out) { out.min = moq; out.step = step; out.value = moq; }
+        var pk = $("#pack"); if (pk) { pk.hidden = moq <= 1; var pn = $("#pack-n"); if (pn) pn.textContent = moq; }
+        var sp = $("#sticky-price"); if (sp) sp.textContent = v.p != null ? eur(v.p) + " " + { nl: "excl. btw", en: "excl. VAT", de: "zzgl. MwSt." }[LANG] : T.req;
+        var wr = $("#p-warranty"); if (wr && v.w) wr.textContent = v.w;
+        var st = $("#p-specs"); if (st) st.innerHTML = v.specs.map(function (r) { return "<tr><td>" + esc(r[0]) + "</td><td>" + esc(r[1]) + "</td></tr>"; }).join("");
+        var us = $("#p-usps"); if (us && v.usps) us.innerHTML = v.usps.map(function (u) { return "<li>" + esc(u) + "</li>"; }).join("");
+        if (v.imgs && v.imgs.length) {
+          var g = $("#gallery"), mainImg = $(".main img", g);
+          if (mainImg && mainImg.getAttribute("src") !== "/img/p/" + v.imgs[0][1]) {
+            mainImg.src = "/img/p/" + v.imgs[0][1];
+            var th = $(".thumbs", g);
+            if (th) { th.innerHTML = v.imgs.map(function (im, i) { return '<button type="button" data-src="/img/p/' + im[1] + '"' + (i === 0 ? ' aria-current="true"' : "") + '><img src="/img/p/' + im[0] + '" alt="" loading="lazy" width="66" height="66"></button>'; }).join(""); th.hidden = v.imgs.length < 2; bindThumbs(); }
+          }
+        }
+        $$(".opt-btn", pdp).forEach(function (b) {
+          var k = b.getAttribute("data-key"), val = b.getAttribute("data-v");
+          b.classList.toggle("on", v.o[k] === val);
+          var sel = {}; FAMD.keys.forEach(function (kk) { sel[kk] = v.o[kk]; }); sel[k] = val;
+          b.classList.toggle("dim", !FAMD.v.some(function (x) { return matches(x, sel); }));
+        });
+        if (push && history.replaceState) { var u = new URL(location.href); u.searchParams.set("v", sku); history.replaceState(null, "", u.toString()); }
+        upd();
+      };
+      $$(".opt-btn", pdp).forEach(function (b) {
+        b.addEventListener("click", function () {
+          var k = b.getAttribute("data-key"), val = b.getAttribute("data-v"), sel = {};
+          FAMD.keys.forEach(function (kk) { sel[kk] = curV ? curV.o[kk] : null; }); sel[k] = val;
+          var exact = FAMD.v.filter(function (x) { return matches(x, sel); })[0];
+          if (!exact) { var s2 = {}; s2[k] = val; FAMD.keys.forEach(function (kk) { if (kk !== k) s2[kk] = sel[kk]; }); exact = pick(s2); if (exact.o[k] !== val) { var only = {}; only[k] = val; exact = FAMD.v.filter(function (x) { return x.o[k] === val; })[0] || pick(only); } }
+          setV(exact, true);
+        });
+      });
+      var want = new URLSearchParams(location.search).get("v");
+      setV(bySku[want] || bySku[sku] || FAMD.v[0], false);
+    }
     var st = $("#sticky-buy"), sa = $("#sticky-add"), act = $(".actions");
     if (st && act && "IntersectionObserver" in window) { new IntersectionObserver(function (es) { st.classList.toggle("show", !es[0].isIntersecting && es[0].boundingClientRect.top < 0); }).observe(act); }
     if (sa) sa.addEventListener("click", function () { addQ(sku, qty); });
     $$(".add-all").forEach(function (b) { b.addEventListener("click", function () { addQ(sku, qty); var first = $('.minis[data-group="' + b.getAttribute("data-group") + '"] .mini'); if (first) { addQ(first.getAttribute("data-sku"), qty, parseInt(first.getAttribute("data-moq"), 10) || 1); } location.href = P + "/offerte/"; }); });
     upd();
-    var main = $(".gallery .main img"), thumbs = $$(".gallery .thumbs button");
-    thumbs.forEach(function (b) { b.addEventListener("click", function () { main.src = b.getAttribute("data-src"); thumbs.forEach(function (x) { x.removeAttribute("aria-current"); }); b.setAttribute("aria-current", "true"); }); });
+    function bindThumbs() {
+      var main = $(".gallery .main img"), thumbs = $$(".gallery .thumbs button");
+      thumbs.forEach(function (b) { b.addEventListener("click", function () { main.src = b.getAttribute("data-src"); thumbs.forEach(function (x) { x.removeAttribute("aria-current"); }); b.setAttribute("aria-current", "true"); }); });
+    }
+    bindThumbs();
   }
 
   /* ---- bundelknoppen (productpagina, offertepagina) ---- */

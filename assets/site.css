@@ -506,3 +506,26 @@ table.snel td:first-child{width:auto}
 .form .two.three{grid-template-columns:1fr 1fr 1fr}
 @media (max-width:560px){.form .two.three{grid-template-columns:1fr}}
 .chk-note{font-size:12.5px;color:var(--warn);margin-top:.5rem}
+
+/* productfamilies: optiekiezer (13 okt 2026) */
+.opts{margin-top:1.1rem;display:flex;flex-direction:column;gap:.9rem}
+.optrow h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:.45rem;font-weight:600}
+.optvals{display:flex;flex-wrap:wrap;gap:.4rem}
+.opt-btn{font:inherit;font-size:13.5px;font-weight:500;color:var(--ink2);background:rgba(255,255,255,.04);border:1px solid var(--hair);border-radius:10px;padding:.45rem .8rem;cursor:pointer;transition:all .2s var(--ease)}
+.opt-btn:hover{border-color:rgba(61,139,255,.6);color:#fff}
+.opt-btn.on{background:var(--neon-soft);border-color:var(--neon);color:#fff;box-shadow:0 0 0 1px var(--neon) inset}
+.opt-btn.dim{opacity:.45;border-style:dashed}
+.fam-sub{margin-top:.5rem;color:var(--ink2);font-size:14px}
+.chip-n{color:var(--neon2);border-color:rgba(61,139,255,.45)}
+.note-box{display:flex;gap:1rem;align-items:flex-start;background:var(--neon-soft);border:1px solid rgba(61,139,255,.35);border-radius:var(--r2);padding:1.1rem 1.3rem;margin:1.2rem 0 .4rem}
+.note-box svg{width:26px;height:26px;flex:none;color:var(--neon2)}
+.note-box b{display:block;color:#fff;margin-bottom:.2rem}.note-box span{font-size:14px;color:var(--ink2)}
+/* outlet */
+.tag-outlet{background:#e5484d!important;color:#fff!important;border-color:#e5484d!important}
+.card .price s{color:var(--mute);font-weight:400;font-size:.85em;margin-right:.3rem}
+.badge-outlet{color:#ff8a8e;border-color:rgba(229,72,77,.5)}
+.outletbox tr.on td{background:rgba(229,72,77,.14)}
+.outletbox s{color:var(--mute);font-weight:400;margin-right:.4rem}
+.outlet-note{font-size:13px;color:var(--mute);padding:.7rem 1rem;border-top:1px solid var(--hair)}
+.card.is-outlet .foot .price{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15}
+.card.is-outlet .foot .price s{font-size:12px;margin:0}
