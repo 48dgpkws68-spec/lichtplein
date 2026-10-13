@@ -11,7 +11,7 @@
   }[LANG];
   var KEY = "lp-offerte";
   var VARIANTS = window.LP_VARIANTS || {};
-  var SHOP = "5wkm0h-xs.myshopify.com";
+  var SHOP = "djtprm-a1.myshopify.com";
 
   function $(s, r) { return (r || document).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
