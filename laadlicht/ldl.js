@@ -4,15 +4,6 @@
   if (!root) return;
   var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // loader
-  var bar = root.querySelector('.ldl-bar i'), pct = root.querySelector('.ldl-pct'), p = 0;
-  function tick() {
-    p = Math.min(100, p + (RM ? 100 : 4 + Math.random() * 9));
-    if (bar) bar.style.width = p + '%';
-    if (pct) pct.textContent = Math.round(p) + '%';
-    if (p < 100) setTimeout(tick, 45); else setTimeout(function () { root.classList.add('ready'); root.classList.add('go'); }, 150);
-  }
-  tick();
 
   // status
   var NAMES = { vrij: 'Vrij', stekker: 'Stekker erin', laden: 'Laden', vol: 'Vol', storing: 'Storing' };
@@ -139,3 +130,5 @@
     });
   });
 })();
+// vangnet: als de intro niet start, toon de pagina toch
+setTimeout(function () { var r = document.querySelector('.ldl'); if (r) r.classList.add('ready', 'go'); }, 16000);

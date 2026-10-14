@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Unbounded:wght@500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Unbounded:wght@500;700;900&family=Instrument+Serif:ital@1&display=swap');
 /* LUMIVOLT: de pagina kleurt mee met de status-LED van de mast (data-state op .ldl) */
 @property --acc{syntax:'<color>';inherits:true;initial-value:#2F8CFF}
 @property --acc2{syntax:'<color>';inherits:true;initial-value:#22E6FF}
@@ -42,12 +42,15 @@
 .ldl-chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:32px 0 0}
 .ldl-chips li{padding:8px 13px;border:1px solid var(--line);border-radius:999px;color:var(--ink2);background:rgba(255,255,255,.02);backdrop-filter:blur(8px)}
 
-/* loader */
-.ldl-loader{position:fixed;inset:0;z-index:200;background:var(--bg);display:grid;place-items:center;transition:opacity .7s,visibility .7s}
-.ldl-loader-in{display:grid;gap:14px;justify-items:center;color:var(--ink2)}
-.ldl-bar{width:min(320px,70vw);height:3px;background:var(--line);border-radius:3px;overflow:hidden}
-.ldl-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--acc2));box-shadow:0 0 18px var(--acc2)}
-.ldl.ready .ldl-loader{opacity:0;visibility:hidden}
+/* intro-film */
+html.ldl-lock,html.ldl-lock body{overflow:hidden}
+.ldl-intro{position:fixed;inset:0;z-index:300;background:#05070c;transition:opacity .8s cubic-bezier(.65,0,.35,1),transform .9s cubic-bezier(.65,0,.35,1)}
+.ldl-intro canvas{display:block;width:100%;height:100%}
+.ldl-intro.out{opacity:0;transform:scale(1.08);pointer-events:none}
+.ldl-skip{position:absolute;right:clamp(28px,5vw,60px);bottom:clamp(44px,7vh,80px);padding:12px 18px;min-height:44px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(5,7,12,.45);backdrop-filter:blur(10px);color:#fff;cursor:pointer;mix-blend-mode:normal}
+.ldl-skip:hover{background:#fff;color:#05070c}
+.ldl-intro-bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.1)}
+.ldl-intro-bar i{display:block;height:100%;background:linear-gradient(90deg,#22E6FF,#FF8A1F);transform:scaleX(0);transform-origin:left}
 
 /* hero */
 .ldl-hero{min-height:calc(100svh - 70px);display:flex;align-items:center;position:relative;padding-block:60px 100px}
