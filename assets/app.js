@@ -428,6 +428,9 @@
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { rootMargin: "0px 0px -8% 0px" });
     $$(".rv").forEach(function (el) { io.observe(el); });
+    // vangnet: alles wat in beeld staat altijd tonen, ook als de observer laat of niet vuurt
+    var sweep = function () { $$(".rv:not(.in)").forEach(function (el) { var r = el.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) { el.classList.add("in"); io.unobserve(el); } }); };
+    addEventListener("scroll", sweep, { passive: true }); addEventListener("load", sweep); setTimeout(sweep, 900); setTimeout(sweep, 2500);
   } else { $$(".rv").forEach(function (el) { el.classList.add("in"); }); }
 
   /* ---- teller ---- */

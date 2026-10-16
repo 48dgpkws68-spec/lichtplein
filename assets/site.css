@@ -552,3 +552,23 @@ table.snel td:first-child{width:auto}
 .feat-txt p{color:var(--ink2);font-size:14px}
 .feat-txt .link{display:inline-block;margin-top:.8rem;color:var(--neon2);font-weight:600;font-size:14px}
 @media (max-width:760px){.feat-grid{grid-template-columns:1fr}.feat{grid-template-rows:220px auto}.feat img{height:220px}}
+/* Van A tot Z (16 okt 2026) */
+.a2z .sec-head{align-items:flex-end;gap:1.5rem;flex-wrap:wrap}
+.a2z-track{position:relative;display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;margin-top:2rem}
+.a2z-line{position:absolute;left:4%;right:4%;top:28px;height:2px;background:var(--hair);overflow:hidden;z-index:0}
+.a2z-line i{position:absolute;inset:0;background:linear-gradient(90deg,transparent,var(--neon2),var(--neon),transparent);width:30%;animation:a2zRun 4.5s linear infinite}
+@keyframes a2zRun{from{transform:translateX(-100%)}to{transform:translateX(340%)}}
+.a2z-step{position:relative;z-index:1;display:flex;flex-direction:column;gap:.45rem;padding:1.1rem 1rem 1.2rem;border-radius:var(--r2);border:1px solid var(--hair);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));transition:transform .35s var(--ease),border-color .3s,box-shadow .3s;transition-delay:calc(var(--i)*60ms)}
+.a2z-step:hover{transform:translateY(-4px);border-color:rgba(61,139,255,.55);box-shadow:0 20px 50px -30px var(--neon-glow)}
+.a2z-n{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font:700 15px var(--display,inherit);color:#fff;background:linear-gradient(135deg,#3d8bff,#2e6df0);box-shadow:0 0 0 6px var(--bg),0 0 24px -4px var(--neon-glow)}
+.a2z-ic svg{width:22px;height:22px;color:var(--neon2);margin-top:.35rem}
+.a2z-step b{color:#fff;font-size:15px;line-height:1.25}
+.a2z-step small{color:var(--ink2);font-size:13px;line-height:1.5}
+.a2z-compact{padding-block:2.5rem}
+@media (max-width:1100px){.a2z-track{grid-template-columns:repeat(3,1fr)}.a2z-line{display:none}}
+@media (max-width:600px){.a2z-track{grid-template-columns:1fr 1fr;gap:.6rem}.a2z-step{padding:.9rem .8rem}}
+@media (prefers-reduced-motion:reduce){.a2z-line i{animation:none}}
+
+/* brede schermen: inhoud mag meegroeien (16 okt 2026) */
+@media (min-width:1500px){:root{--max:1400px}.grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}}
+@media (min-width:1800px){:root{--max:1600px}html{font-size:17px}}
