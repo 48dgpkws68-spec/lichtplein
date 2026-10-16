@@ -544,11 +544,11 @@ table.snel td:first-child{width:auto}
 @media (max-width:1240px){.nav{gap:.7rem;font-size:13px}.search{flex:0 1 240px;min-width:170px}}
 /* homepage: uitgelicht (16 okt 2026) */
 .feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.4rem}
-.feat{position:relative;display:grid;grid-template-rows:260px auto;border:1px solid var(--hair);border-radius:var(--r2);overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));transition:transform .35s var(--ease),border-color .3s}
+.feat{position:relative;display:grid;grid-template-rows:300px auto;border:1px solid var(--hair);border-radius:var(--r2);overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));transition:transform .35s var(--ease),border-color .3s}
 .feat:hover{transform:translateY(-4px);border-color:rgba(61,139,255,.5)}
-.feat img{width:100%;height:260px;object-fit:cover;background:#05070c}
+.feat img{width:100%;height:300px;object-fit:contain;background:#05070c}
 .feat-txt{padding:1.3rem 1.4rem 1.5rem}
 .feat-txt h3{margin:.4rem 0 .5rem;font-size:1.15rem;color:#fff}
 .feat-txt p{color:var(--ink2);font-size:14px}
 .feat-txt .link{display:inline-block;margin-top:.8rem;color:var(--neon2);font-weight:600;font-size:14px}
-@media (max-width:760px){.feat-grid{grid-template-columns:1fr}.feat{grid-template-rows:200px auto}.feat img{height:200px}}
+@media (max-width:760px){.feat-grid{grid-template-columns:1fr}.feat{grid-template-rows:220px auto}.feat img{height:220px}}
