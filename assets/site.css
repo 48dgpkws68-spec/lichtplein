@@ -316,7 +316,8 @@ footer{background:var(--bg2);border-top:1px solid var(--hair);margin-top:2rem}
 @media (max-width:520px){.fgrid{grid-template-columns:1fr}}
 
 /* reveal */
-.rv{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rv{opacity:0;transform:translateY(10px);transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.grid>.rv{transition-delay:calc(min(var(--i,0),5) * 40ms)}
 .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.track{animation:none}}
 
@@ -572,3 +573,7 @@ table.snel td:first-child{width:auto}
 /* brede schermen: inhoud mag meegroeien (16 okt 2026) */
 @media (min-width:1500px){:root{--max:1400px}.grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}}
 @media (min-width:1800px){:root{--max:1600px}html{font-size:17px}}
+/* kleurstalen schakelmateriaal (19 okt 2026) */
+.sw{display:inline-block;width:14px;height:14px;border-radius:50%;border:1px solid rgba(127,127,127,.45);vertical-align:-2px;margin-right:.4rem;flex:none}
+.chip-sw{display:inline-flex;align-items:center;gap:0}.chip-sw .sw{width:11px;height:11px;margin-right:-3px}.chip-sw .sw:last-of-type{margin-right:.45rem}
+.opt-btn{display:inline-flex;align-items:center}

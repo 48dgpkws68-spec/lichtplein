@@ -167,9 +167,11 @@
       var shown = 0;
       cards.forEach(function (c) {
         var ok = true;
-        Object.keys(active).forEach(function (k) { var vs = (c.getAttribute("data-" + k) || "").split(" "); if (!active[k].some(function (a) { return vs.indexOf(a) >= 0; })) ok = false; });
+        Object.keys(active).forEach(function (k) { var vs = (c.getAttribute("data-" + k) || "").split(k === "afw" ? "|" : " "); if (!active[k].some(function (a) { return vs.indexOf(a) >= 0; })) ok = false; });
         if (ok && t && (c.getAttribute("data-zoek") || "").indexOf(t) < 0) ok = false;
         c.style.display = ok ? "" : "none";
+        var cm = c.getAttribute("data-cimg"), im = c.querySelector(".shot img");
+        if (cm && im) { cm = JSON.parse(cm); if (!im.dataset.orig) im.dataset.orig = im.getAttribute("src"); var col = (active.afw || []).filter(function (a) { return cm[a]; })[0]; im.src = col ? "/img/p/" + cm[col] : im.dataset.orig; }
         if (ok) shown++;
       });
       if (count) count.textContent = shown + " " + T.results;
@@ -426,7 +428,7 @@
 
   /* ---- reveal ---- */
   if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { rootMargin: "0px 0px -8% 0px" });
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { rootMargin: "0px 0px 20% 0px" });
     $$(".rv").forEach(function (el) { io.observe(el); });
     // vangnet: alles wat in beeld staat altijd tonen, ook als de observer laat of niet vuurt
     var sweep = function () { $$(".rv:not(.in)").forEach(function (el) { var r = el.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) { el.classList.add("in"); io.unobserve(el); } }); };
