@@ -181,3 +181,7 @@
   .stp-tags li,.stp-chips li{font-size:13px}
   .stp-cards{gap:24px}
 }
+.stp-film{padding:clamp(3rem,7vw,6rem) 1rem}.stp-film-in{max-width:1200px;margin:0 auto}
+.stp-film h2{font-size:clamp(1.8rem,4vw,3rem);margin:.3rem 0 1.4rem}
+.stp-film video{width:100%;height:auto;aspect-ratio:16/9;border-radius:18px;background:#000;display:block;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.stp-film .stp-eyebrow{margin-bottom:6px}
