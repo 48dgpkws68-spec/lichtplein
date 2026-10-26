@@ -577,3 +577,17 @@ table.snel td:first-child{width:auto}
 .sw{display:inline-block;width:14px;height:14px;border-radius:50%;border:1px solid rgba(127,127,127,.45);vertical-align:-2px;margin-right:.4rem;flex:none}
 .chip-sw{display:inline-flex;align-items:center;gap:0}.chip-sw .sw{width:11px;height:11px;margin-right:-3px}.chip-sw .sw:last-of-type{margin-right:.45rem}
 .opt-btn{display:inline-flex;align-items:center}
+
+/* datasheets op de seriepagina */
+.ds-list{border:1px solid var(--hair);border-radius:var(--r);padding:1rem 1.2rem;background:var(--panel)}
+.ds-list summary{cursor:pointer;display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1rem;list-style:none}
+.ds-list summary::-webkit-details-marker{display:none}
+.ds-list summary h2{margin:0;font-size:1.25rem}
+.ds-list summary h2::after{content:" +";color:var(--neon)}
+.ds-list[open] summary h2::after{content:" \2212"}
+.ds-list ul{list-style:none;margin:1rem 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.5rem}
+.ds-list a{display:flex;gap:.6rem;align-items:flex-start;padding:.6rem .7rem;border-radius:10px;color:inherit;text-decoration:none;border:1px solid transparent;min-height:44px}
+.ds-list a:hover{border-color:var(--hair);background:var(--panel2)}
+.ds-list a svg{width:18px;height:18px;flex:none;color:var(--neon);margin-top:2px}
+.ds-list b{display:block;font-size:14px}
+.ds-list small{display:block;color:var(--mute);font-size:12px}

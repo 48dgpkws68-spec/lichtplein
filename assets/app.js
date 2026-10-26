@@ -232,6 +232,7 @@
         var pk = $("#pack"); if (pk) { pk.hidden = moq <= 1; var pn = $("#pack-n"); if (pn) pn.textContent = moq; }
         var sp = $("#sticky-price"); if (sp) sp.textContent = v.p != null ? eur(v.p) + " " + { nl: "excl. btw", en: "excl. VAT", de: "zzgl. MwSt." }[LANG] : T.req;
         var wr = $("#p-warranty"); if (wr && v.w) wr.textContent = v.w;
+        var dsr = $("#p-ds-row"), ds = $("#p-ds"); if (dsr && ds) { dsr.hidden = !v.ds; if (v.ds) ds.href = v.ds; }
         var st = $("#p-specs"); if (st) st.innerHTML = v.specs.map(function (r) { return "<tr><td>" + esc(r[0]) + "</td><td>" + esc(r[1]) + "</td></tr>"; }).join("");
         var us = $("#p-usps"); if (us && v.usps) us.innerHTML = v.usps.map(function (u) { return "<li>" + esc(u) + "</li>"; }).join("");
         if (v.imgs && v.imgs.length) {
