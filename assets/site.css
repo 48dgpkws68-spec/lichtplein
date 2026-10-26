@@ -259,6 +259,7 @@ section.sec{padding:clamp(3rem,6vw,5.5rem) 0}
 .actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.2rem}
 .trust{margin-top:1.2rem;display:flex;flex-direction:column;gap:.45rem;font-size:13.5px;color:var(--mute)}
 .trust div{display:flex;align-items:center;gap:.5rem}
+.trust div[hidden]{display:none}
 .trust .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
 .trust svg{width:16px;height:16px;color:var(--neon)}
 .details{display:grid;grid-template-columns:1fr 1fr;gap:2.6rem;padding:0 0 3rem}
