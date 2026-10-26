@@ -97,6 +97,7 @@
   <url><loc>https://lichtplein.nl/serie/via/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
   <url><loc>https://lichtplein.nl/serie/exora/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
   <url><loc>https://lichtplein.nl/serie/polaris/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
+  <url><loc>https://lichtplein.nl/serie/asd/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
   <url><loc>https://lichtplein.nl/serie/turris/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
   <url><loc>https://lichtplein.nl/serie/civis/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
   <url><loc>https://lichtplein.nl/serie/nexus/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
@@ -148,6 +149,15 @@
   <url><loc>https://lichtplein.nl/product/quadra-opbouwframe-62x62-cm-voor-backlit-paneel/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/product/quadra-opbouwframe-30x120-cm-voor-backlit-paneel/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/product/quadra-opbouwframe-60x120-cm-voor-backlit-paneel-wit/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/product/asd-horizon-round-louvre-283-mm/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/product/asd-clarity-portrait-louvre/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/product/asd-horizon-round-plain-353-mm/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/product/asd-horizon-round-eyelid-353-mm/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/product/asd-horizon-round-louvre-353-mm/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/product/asd-enso-quart-flood-beam-gevelarmatuur/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/product/asd-coach-lantern-wandlantaarn/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/product/asd-half-lantern-halve-wandlantaarn/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/product/asd-grande-lantern-wandlantaarn/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/product/luxa-enkelpolige-schakelaar/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/product/luxa-pulsdrukker-enkel/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/product/luxa-tweepolige-schakelaar/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
@@ -330,6 +340,7 @@
   <url><loc>https://lichtplein.nl/product/lp-qd320/</loc><lastmod>2026-10-26</lastmod><priority>0.6</priority></url>
   <url><loc>https://lichtplein.nl/product/lp-qd321/</loc><lastmod>2026-10-26</lastmod><priority>0.6</priority></url>
   <url><loc>https://lichtplein.nl/product/lp-qd322/</loc><lastmod>2026-10-26</lastmod><priority>0.6</priority></url>
+  <url><loc>https://lichtplein.nl/product/lp-as197/</loc><lastmod>2026-10-26</lastmod><priority>0.6</priority></url>
   <url><loc>https://lichtplein.nl/offerte/</loc><lastmod>2026-10-26</lastmod><priority>0.5</priority></url>
   <url><loc>https://lichtplein.nl/contact/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/lichtplan/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
@@ -435,6 +446,7 @@
   <url><loc>https://lichtplein.nl/en/serie/via/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
   <url><loc>https://lichtplein.nl/en/serie/exora/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
   <url><loc>https://lichtplein.nl/en/serie/polaris/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
+  <url><loc>https://lichtplein.nl/en/serie/asd/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
   <url><loc>https://lichtplein.nl/en/serie/turris/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
   <url><loc>https://lichtplein.nl/en/serie/civis/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
   <url><loc>https://lichtplein.nl/en/serie/nexus/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
@@ -486,6 +498,15 @@
   <url><loc>https://lichtplein.nl/en/product/quadra-opbouwframe-62x62-cm-voor-backlit-paneel/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/en/product/quadra-opbouwframe-30x120-cm-voor-backlit-paneel/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/en/product/quadra-opbouwframe-60x120-cm-voor-backlit-paneel-wit/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/en/product/asd-horizon-round-louvre-283-mm/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/en/product/asd-clarity-portrait-louvre/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/en/product/asd-horizon-round-plain-353-mm/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/en/product/asd-horizon-round-eyelid-353-mm/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/en/product/asd-horizon-round-louvre-353-mm/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/en/product/asd-enso-quart-flood-beam-gevelarmatuur/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/en/product/asd-coach-lantern-wandlantaarn/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/en/product/asd-half-lantern-halve-wandlantaarn/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/en/product/asd-grande-lantern-wandlantaarn/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/en/product/luxa-enkelpolige-schakelaar/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/en/product/luxa-pulsdrukker-enkel/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/en/product/luxa-tweepolige-schakelaar/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
@@ -668,6 +689,7 @@
   <url><loc>https://lichtplein.nl/en/product/lp-qd320/</loc><lastmod>2026-10-26</lastmod><priority>0.6</priority></url>
   <url><loc>https://lichtplein.nl/en/product/lp-qd321/</loc><lastmod>2026-10-26</lastmod><priority>0.6</priority></url>
   <url><loc>https://lichtplein.nl/en/product/lp-qd322/</loc><lastmod>2026-10-26</lastmod><priority>0.6</priority></url>
+  <url><loc>https://lichtplein.nl/en/product/lp-as197/</loc><lastmod>2026-10-26</lastmod><priority>0.6</priority></url>
   <url><loc>https://lichtplein.nl/en/offerte/</loc><lastmod>2026-10-26</lastmod><priority>0.5</priority></url>
   <url><loc>https://lichtplein.nl/en/contact/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/en/lichtplan/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
@@ -773,6 +795,7 @@
   <url><loc>https://lichtplein.nl/de/serie/via/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
   <url><loc>https://lichtplein.nl/de/serie/exora/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
   <url><loc>https://lichtplein.nl/de/serie/polaris/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
+  <url><loc>https://lichtplein.nl/de/serie/asd/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
   <url><loc>https://lichtplein.nl/de/serie/turris/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
   <url><loc>https://lichtplein.nl/de/serie/civis/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
   <url><loc>https://lichtplein.nl/de/serie/nexus/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>
@@ -824,6 +847,15 @@
   <url><loc>https://lichtplein.nl/de/product/quadra-opbouwframe-62x62-cm-voor-backlit-paneel/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/de/product/quadra-opbouwframe-30x120-cm-voor-backlit-paneel/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/de/product/quadra-opbouwframe-60x120-cm-voor-backlit-paneel-wit/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/de/product/asd-horizon-round-louvre-283-mm/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/de/product/asd-clarity-portrait-louvre/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/de/product/asd-horizon-round-plain-353-mm/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/de/product/asd-horizon-round-eyelid-353-mm/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/de/product/asd-horizon-round-louvre-353-mm/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/de/product/asd-enso-quart-flood-beam-gevelarmatuur/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/de/product/asd-coach-lantern-wandlantaarn/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/de/product/asd-half-lantern-halve-wandlantaarn/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://lichtplein.nl/de/product/asd-grande-lantern-wandlantaarn/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/de/product/luxa-enkelpolige-schakelaar/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/de/product/luxa-pulsdrukker-enkel/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/de/product/luxa-tweepolige-schakelaar/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
@@ -1006,6 +1038,7 @@
   <url><loc>https://lichtplein.nl/de/product/lp-qd320/</loc><lastmod>2026-10-26</lastmod><priority>0.6</priority></url>
   <url><loc>https://lichtplein.nl/de/product/lp-qd321/</loc><lastmod>2026-10-26</lastmod><priority>0.6</priority></url>
   <url><loc>https://lichtplein.nl/de/product/lp-qd322/</loc><lastmod>2026-10-26</lastmod><priority>0.6</priority></url>
+  <url><loc>https://lichtplein.nl/de/product/lp-as197/</loc><lastmod>2026-10-26</lastmod><priority>0.6</priority></url>
   <url><loc>https://lichtplein.nl/de/offerte/</loc><lastmod>2026-10-26</lastmod><priority>0.5</priority></url>
   <url><loc>https://lichtplein.nl/de/contact/</loc><lastmod>2026-10-26</lastmod><priority>0.7</priority></url>
   <url><loc>https://lichtplein.nl/de/lichtplan/</loc><lastmod>2026-10-26</lastmod><priority>0.8</priority></url>

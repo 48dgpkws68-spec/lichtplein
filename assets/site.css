@@ -591,3 +591,45 @@ table.snel td:first-child{width:auto}
 .ds-list a svg{width:18px;height:18px;flex:none;color:var(--neon);margin-top:2px}
 .ds-list b{display:block;font-size:14px}
 .ds-list small{display:block;color:var(--mute);font-size:12px}
+
+/* catalogusweergave schakelmateriaal (Liregus-catalogus 2026) */
+.cat-intro{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(1.2rem,3vw,2.6rem);align-items:stretch;margin:.5rem 0 2rem}
+.cat-mood{border-radius:var(--r2);overflow:hidden;background:var(--panel);min-height:280px}
+.cat-mood img{width:100%;height:100%;object-fit:cover;display:block}
+.cat-text p{color:var(--ink2);font-size:15.5px;line-height:1.7;margin:.6rem 0 1.2rem}
+.cat-text h3{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin:1.4rem 0 .7rem}
+.cat-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.6rem}
+.cat-facts div{background:var(--panel);border:1px solid var(--hair);border-radius:12px;padding:.7rem .8rem}
+.cat-facts b{display:block;font-family:var(--display);font-size:1.5rem;color:var(--ink)}
+.cat-facts span{font-size:12.5px;color:var(--mute)}
+.cat-swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:.8rem}
+.cat-swatches figure{margin:0}
+.cat-swatches img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;background:#fff;display:block}
+.cat-swatches figcaption{font-size:13px;font-weight:600;margin-top:.4rem}
+.cat-swatches figcaption::first-letter{text-transform:uppercase}
+.cat-swatches small{display:block;font-weight:400;color:var(--mute);font-size:11.5px;text-transform:none}
+.cat-jump{position:sticky;top:64px;z-index:5;display:flex;gap:.4rem;overflow-x:auto;padding:.6rem 0;margin:0 0 1rem;background:var(--bg);scrollbar-width:none}
+.cat-jump::-webkit-scrollbar{display:none}
+.cat-jump a{flex:none;padding:.45rem .8rem;border:1px solid var(--hair);border-radius:999px;font-size:13.5px;color:var(--ink2);text-decoration:none;min-height:36px;display:inline-flex;align-items:center;gap:.4rem}
+.cat-jump a:hover{border-color:var(--neon);color:var(--ink)}
+.cat-jump span{color:var(--mute);font-size:12px}
+.cat-group{scroll-margin-top:120px;margin:0 0 2.4rem}
+.cat-group h2{font-size:1.35rem;margin:0 0 .8rem;padding-bottom:.5rem;border-bottom:1px solid var(--hair)}
+.cat-rows{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:.6rem}
+.cat-row{display:grid;grid-template-columns:84px minmax(0,1fr) auto;gap:.9rem;align-items:center;background:var(--panel);border:1px solid var(--hair);border-radius:var(--r);padding:.6rem .8rem .6rem .6rem;transition:border-color .2s}
+.cat-row:hover{border-color:rgba(61,139,255,.45)}
+.cat-shot{display:block;width:84px;height:84px;border-radius:10px;background:#fff;overflow:hidden}
+.cat-shot img{width:100%;height:100%;object-fit:contain;display:block}
+.cat-name{display:block;font-weight:650;color:var(--ink);text-decoration:none;font-size:14.5px;line-height:1.35}
+.cat-name:hover{color:var(--neon2)}
+.cat-spec{font-size:12.5px;color:var(--mute);margin:.2rem 0 .45rem}
+.cat-cols{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap}
+.cdot{width:18px;height:18px;border-radius:50%;border:1px solid rgba(255,255,255,.25);display:inline-block;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.cdot:hover{transform:scale(1.15)}
+.cat-ds{margin-left:.4rem;font-size:12px;color:var(--neon2);text-decoration:none;display:inline-flex;align-items:center;gap:.25rem}
+.cat-ds svg{width:13px;height:13px}
+.cat-price{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:.35rem}
+.cat-price small{font-size:11px;color:var(--mute);line-height:1}
+.cat-price b{font-family:var(--display);font-size:1.05rem;white-space:nowrap}
+@media (max-width:860px){.cat-intro{grid-template-columns:1fr}.cat-mood{max-height:320px}.cat-rows{grid-template-columns:1fr}}
+@media (max-width:480px){.cat-row{grid-template-columns:64px minmax(0,1fr);}.cat-shot{width:64px;height:64px}.cat-price{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center}}
