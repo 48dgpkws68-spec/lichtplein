@@ -199,11 +199,12 @@
     var sku = pdp.getAttribute("data-product"), price = parseFloat(pdp.getAttribute("data-prijs")), moq = parseInt(pdp.getAttribute("data-moq"), 10) || 1, step = parseInt(pdp.getAttribute("data-step"), 10) || 1;
     var out = $("#qty"), sub = $("#subtotaal"), qty = moq, packEl = $("#pack");
     var tier2 = parseInt(pdp.getAttribute("data-tier2"), 10) || 100, hint = parseInt(pdp.getAttribute("data-hint"), 10) || 10, ups = $("#upsell-qty");
+    var maxq = parseInt(pdp.getAttribute("data-max"), 10) || 0; /* outlet: niet meer dan de voorraad */
     var upd = function () { out.value = qty; if (sub) sub.textContent = isNaN(price) ? T.req : (qty >= tier2 ? T.proj : eur(price * qty)); var co = $("#checkout"); if (co) { co.href = "https://" + SHOP + "/cart/" + VARIANTS[sku] + ":" + qty; co.hidden = !VARIANTS[sku] || qty >= tier2; } $$(".pricebox tr").forEach(function (tr) { var min = parseInt(tr.getAttribute("data-min"), 10); if (!isNaN(min)) tr.classList.toggle("on", qty >= min && qty < parseInt(tr.getAttribute("data-max"), 10)); }); if (ups) ups.hidden = qty < hint; $$(".mini[data-sync] .add-bundle").forEach(function (b) { b.setAttribute("data-qty", qty); }); };
     var minus = $("#min"), plus = $("#plus");
     if (minus) minus.addEventListener("click", function () { qty = Math.max(moq, qty - step); upd(); });
-    if (plus) plus.addEventListener("click", function () { qty += step; upd(); });
-    out.addEventListener("change", function () { var v = norm(out.value, moq); if (packEl) packEl.hidden = moq <= 1; qty = v; upd(); });
+    if (plus) plus.addEventListener("click", function () { qty = maxq ? Math.min(maxq, qty + step) : qty + step; upd(); });
+    out.addEventListener("change", function () { var v = norm(out.value, moq); if (maxq && v > maxq) v = maxq; if (packEl) packEl.hidden = moq <= 1; qty = v; upd(); });
     out.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); out.blur(); } });
     var add = $("#add"); if (add) add.addEventListener("click", function () { addQ(sku, qty); });
     var quick = $("#quick"); if (quick) quick.addEventListener("click", function () { addQ(sku, qty); location.href = P + "/offerte/"; });
