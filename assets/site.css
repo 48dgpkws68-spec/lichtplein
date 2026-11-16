@@ -634,3 +634,15 @@ table.snel td:first-child{width:auto}
 .cat-price b{font-family:var(--display);font-size:1.05rem;white-space:nowrap}
 @media (max-width:860px){.cat-intro{grid-template-columns:1fr}.cat-mood{max-height:320px}.cat-rows{grid-template-columns:1fr}}
 @media (max-width:480px){.cat-row{grid-template-columns:64px minmax(0,1fr);}.cat-shot{width:64px;height:64px}.cat-price{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center}}
+/* 16 nov 2026: uitklapmenu Straatverlichting (Koffermodel, Paaltop) */
+.mega.mega-sm{grid-template-columns:1fr;min-width:300px}
+.mega.mega-sm a b{margin-right:0}
+/* 16 nov 2026: menu op een eigen tweede regel (10 menu-items pasten niet naast logo, zoekveld en offerteknop) */
+@media (min-width:1081px){
+  .bar{flex-wrap:wrap;height:auto;row-gap:0;padding-top:.55rem}
+  .bar>.brand{height:56px;display:flex;align-items:center}
+  .bar>.search{flex:0 1 520px;min-width:260px}
+  .nav{order:5;flex:1 0 100%;margin:0;gap:1.5rem;height:46px;align-items:center;border-top:1px solid var(--hair);font-size:14px}
+  html{scroll-padding-top:150px}
+}
+@media (min-width:1081px) and (max-width:1260px){.nav{gap:1rem;font-size:13.5px}}

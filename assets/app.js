@@ -47,7 +47,11 @@
   function name(p) { return (LANG !== "nl" && p[LANG]) ? p[LANG] : p.nl; }
   function url(p) { if (p.a) return P + "/kennis/" + p.a + "/"; if (p.fam) return P + "/product/" + p.fam + "/"; if (p.l) return P + "/product/" + p.l + "/?v=" + p.sku; return P + "/product/" + p.sku.toLowerCase() + "/"; }
   function isMast(p) { return p.s === "TURRIS" || (p.s === "CIVIS" && /mast/i.test(p.nl)); }
-  function byIndex(cb) { index().then(function (idx) { var by = {}; idx.forEach(function (p) { if (p.sku) by[p.sku] = p; }); cb(by, idx); }); }
+  /* artikelnummers: ons LP-nummer of de leverancierscode (p.c, sinds 16 nov 2026 het getoonde nummer) */
+  function ck(s) { return String(s || "").toUpperCase().replace(/\s+/g, ""); }
+  function byIndex(cb) { index().then(function (idx) { var by = {}; idx.forEach(function (p) { if (p.sku) { by[p.sku] = p; if (p.c && !by["#" + ck(p.c)]) by["#" + ck(p.c)] = p; } }); cb(by, idx); }); }
+  function look(by, tok) { var u = ck(tok), lp = u.replace(/^([A-Z]{2})([A-Z]{2}\d)/, "$1-$2$3"); return by[lp] || by["#" + u] || null; }
+  function nr(p) { return p.c || p.sku; }
   function miniHtml(p, qty) {
     return '<div class="mini" data-sku="' + p.sku + '" data-moq="' + p.m + '"><a class="shot" href="' + url(p) + '">' + (p.i ? '<img src="/img/p/' + p.i + '" alt="" loading="lazy" width="120" height="120">' : "") + '</a><div class="mb"><a class="name" href="' + url(p) + '">' + esc(name(p)) + '</a><div class="pr">' + (p.p != null ? eur(p.p) + " <small>" + (p.u === "set" ? T.set : T.each) + "</small>" : T.req) + '</div></div><button class="btn btn-sm add-bundle" type="button" data-sku="' + p.sku + '" data-qty="' + (qty || p.m) + '">' + T.add + "</button></div>";
   }
@@ -66,7 +70,7 @@
     return prev[b.length];
   }
   function hayOf(p) {
-    if (!p._h) { p._h = fold(p.sku + " " + p.nl + " " + (p.en || "") + " " + (p.de || "") + " " + p.s + " " + p.g + " " + (p.f || "") + " " + (p.k || "") + (p.a ? " " + T.art : "") + (p.o ? " outlet" : "")); p._w = p._h.split(" "); }
+    if (!p._h) { p._h = fold(p.sku + " " + (p.c || "") + " " + p.nl + " " + (p.en || "") + " " + (p.de || "") + " " + p.s + " " + p.g + " " + (p.f || "") + " " + (p.k || "") + (p.a ? " " + T.art : "") + (p.o ? " outlet" : "")); p._w = p._h.split(" "); }
     return p._h;
   }
   function termScore(p, t) {
@@ -109,7 +113,7 @@
   }
   function row(p) {
     if (p.a) return '<a href="' + url(p) + '"><img src="' + (p.i ? "/img/p/" + p.i : "/img/blank.svg") + '" alt="" loading="lazy"><span>' + esc(name(p)) + '<small>' + T.art + (p.s ? " · " + esc(p.s) : "") + '</small></span><span class="price">&rarr;</span></a>';
-    return '<a href="' + url(p) + '"><img src="' + (p.i ? "/img/p/" + p.i : "/img/blank.svg") + '" alt="" loading="lazy"><span>' + esc(name(p)) + '<small>' + esc(p.s) + " · " + (p.sku ? esc(p.sku) : p.n + " " + T.versions) + '</small></span><span class="price">' + (p.p != null ? (p.fam ? T.from + " " : "") + eur(p.p) : T.req) + "</span></a>";
+    return '<a href="' + url(p) + '"><img src="' + (p.i ? "/img/p/" + p.i : "/img/blank.svg") + '" alt="" loading="lazy"><span>' + esc(name(p)) + '<small>' + esc(p.s) + " · " + (p.sku ? esc(nr(p)) : p.n + " " + T.versions) + '</small></span><span class="price">' + (p.p != null ? (p.fam ? T.from + " " : "") + eur(p.p) : T.req) + "</span></a>";
   }
   $$(".search").forEach(function (box) {
     var inp = $("input", box), res = document.createElement("div"); res.className = "results"; box.appendChild(res);
@@ -225,7 +229,7 @@
         curV = v; sku = v.sku; price = v.p == null ? NaN : v.p; moq = v.m || 1; step = moq > 1 ? moq : 1; qty = moq;
         pdp.setAttribute("data-product", sku);
         var nm = $("#p-name"); if (nm) nm.textContent = v.name;
-        var sk = $("#p-sku"); if (sk) sk.textContent = v.sku;
+        var sk = $("#p-sku"); if (sk) sk.textContent = v.c || v.sku;
         var t1 = $("#p-tier1"); if (t1) t1.textContent = v.p != null ? eur(v.p) : T.req;
         var rg = $("#p-reg"); if (rg) rg.textContent = v.reg != null ? eur(v.reg) : "";
         var l1 = $("#lab1"); if (l1) l1.textContent = l1.textContent.replace(/^\d+/, String(moq));
@@ -301,8 +305,10 @@
     var parse = function (by) {
       parsed = [];
       return sin.value.split(/\n/).map(function (l) { return l.trim(); }).filter(Boolean).map(function (l) {
-        var m = l.match(/([A-Za-z]{2}-?[A-Za-z]{2}\d{3})/), sku = m ? m[1].toUpperCase().replace(/^([A-Z]{2})([A-Z]{2})/, "$1-$2") : "", rest = l.replace(m ? m[0] : "", "").replace(/[;,\t]/g, " ").trim(), q = parseInt(rest, 10);
-        var p = by[sku];
+        var toks = l.split(/[\s;,\t]+/).filter(Boolean), p = null, q = NaN, hit = -1;
+        toks.forEach(function (tk, i) { if (!p) { var f = look(by, tk); if (f) { p = f; hit = i; } } });
+        if (p) toks.forEach(function (tk, i) { if (i !== hit && isNaN(q) && /^\d+$/.test(tk)) q = parseInt(tk, 10); });
+        var sku = p ? p.sku : "";
         if (p) { var qq = isNaN(q) || q < 1 ? p.m : norm(q, p.m); parsed.push({ sku: sku, qty: qq }); return { ok: true, p: p, q: qq, line: l, rounded: !isNaN(q) && qq !== q }; }
         return { ok: false, line: l };
       });
@@ -311,7 +317,7 @@
       byIndex(function (by) {
         var rows = parse(by);
         sout.innerHTML = '<table class="snel specs"><thead><tr><th scope="col">#</th><th scope="col">' + (LANG === "en" ? "Item" : "Artikel") + '</th><th scope="col">' + (LANG === "en" ? "Qty" : LANG === "de" ? "Menge" : "Aantal") + '</th><th scope="col">' + (LANG === "en" ? "Price" : LANG === "de" ? "Preis" : "Prijs") + '</th></tr></thead><tbody>' + rows.map(function (r, i) {
-          return r.ok ? '<tr><td>' + (i + 1) + '</td><td><a href="' + url(r.p) + '">' + esc(r.p.sku) + '</a> ' + esc(name(r.p)) + '</td><td>' + r.q + ' <small class="muted">(' + (r.rounded ? ROUNDED + " " + r.q + ", " : "") + T.min + " " + r.p.m + ')</small></td><td>' + (r.p.p != null ? eur(r.p.p * r.q) : T.req) + '</td></tr>'
+          return r.ok ? '<tr><td>' + (i + 1) + '</td><td><a href="' + url(r.p) + '">' + esc(nr(r.p)) + '</a> ' + esc(name(r.p)) + '</td><td>' + r.q + ' <small class="muted">(' + (r.rounded ? ROUNDED + " " + r.q + ", " : "") + T.min + " " + r.p.m + ')</small></td><td>' + (r.p.p != null ? eur(r.p.p * r.q) : T.req) + '</td></tr>'
                       : '<tr class="bad"><td>' + (i + 1) + '</td><td colspan="3">' + esc(r.line) + ' <small>' + T.unknown + "</small></td></tr>";
         }).join("") + "</tbody></table>";
         sadd.hidden = !parsed.length; sadd.textContent = (LANG === "en" ? "Add " : LANG === "de" ? "" : "Zet ") + parsed.length + (LANG === "en" ? " items to quote" : LANG === "de" ? " Artikel zum Angebot" : " artikelen in offerte");
@@ -357,8 +363,8 @@
         var total = 0, lines = [];
         list.innerHTML = rows.map(function (i) {
           var p = by[i.sku], line = p.p != null ? p.p * i.qty : null; if (line) total += line;
-          lines.push(i.qty + "x " + p.sku + " " + name(p) + (p.p != null ? " (" + eur(p.p) + ")" : " (" + T.req + ")"));
-          return '<div class="qrow"><img src="' + (p.i ? "/img/p/" + p.i : "/img/blank.svg") + '" alt=""><div><a class="name" href="' + url(p) + '">' + esc(name(p)) + '</a><small>' + esc(p.sku) + " · " + (p.p != null ? eur(p.p) + " " + (p.u === "set" ? T.set : T.each) : T.req) + '</small></div><input type="number" min="' + p.m + '" step="' + (p.m > 1 ? p.m : 1) + '" value="' + i.qty + '" data-sku="' + p.sku + '" aria-label="Aantal"><div class="line">' + (line != null ? eur(line) : T.req) + '</div><button class="rm" data-sku="' + p.sku + '" aria-label="' + T.rm + '">&times;</button></div>';
+          lines.push(i.qty + "x " + nr(p) + " " + name(p) + (p.p != null ? " (" + eur(p.p) + ")" : " (" + T.req + ")"));
+          return '<div class="qrow"><img src="' + (p.i ? "/img/p/" + p.i : "/img/blank.svg") + '" alt=""><div><a class="name" href="' + url(p) + '">' + esc(name(p)) + '</a><small>' + esc(nr(p)) + " · " + (p.p != null ? eur(p.p) + " " + (p.u === "set" ? T.set : T.each) : T.req) + '</small></div><input type="number" min="' + p.m + '" step="' + (p.m > 1 ? p.m : 1) + '" value="' + i.qty + '" data-sku="' + p.sku + '" aria-label="Aantal"><div class="line">' + (line != null ? eur(line) : T.req) + '</div><button class="rm" data-sku="' + p.sku + '" aria-label="' + T.rm + '">&times;</button></div>';
         }).join("");
         tot.textContent = eur(total);
         if (hidden) hidden.value = lines.join("\n");
@@ -374,7 +380,7 @@
     var clear = $("#qclear"); if (clear) clear.addEventListener("click", function () { if (confirm(clear.getAttribute("data-confirm") || "?")) { writeQ([]); draw(); } });
     var pjb = $("#q-project-btn"); if (pjb) pjb.addEventListener("click", function () { var f = $("#f1"); if (f) f.focus(); });
     window.__qdraw = draw;
-    var qa = $("#q-add"); if (qa) qa.addEventListener("click", function () { var v = ($("#q-sku").value || "").trim().toUpperCase().replace(/^([A-Z]{2})([A-Z]{2}\d)/, "$1-$2$3"), n = parseInt($("#q-qty").value, 10) || 1; byIndex(function (by) { if (by[v]) { addQ(v, n, by[v].m); $("#q-sku").value = ""; draw(); } else toast(T.unknown); }); });
+    var qa = $("#q-add"); if (qa) qa.addEventListener("click", function () { var v = ($("#q-sku").value || "").trim(), n = parseInt($("#q-qty").value, 10) || 1; byIndex(function (by) { var f = look(by, v); if (f) { addQ(f.sku, n, f.m); $("#q-sku").value = ""; draw(); } else toast(T.unknown); }); });
     var qs = $("#q-sku"); if (qs) qs.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); qa.click(); } });
     draw();
     if (form) form.addEventListener("submit", function () { setTimeout(function () { writeQ([]); }, 800); });
