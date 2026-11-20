@@ -204,15 +204,27 @@
     var out = $("#qty"), sub = $("#subtotaal"), qty = moq, packEl = $("#pack");
     var tier2 = parseInt(pdp.getAttribute("data-tier2"), 10) || 100, hint = parseInt(pdp.getAttribute("data-hint"), 10) || 10, ups = $("#upsell-qty");
     var maxq = parseInt(pdp.getAttribute("data-max"), 10) || 0; /* outlet: niet meer dan de voorraad */
-    var upd = function () { out.value = qty; if (sub) sub.textContent = isNaN(price) ? T.req : (qty >= tier2 ? T.proj : eur(price * qty)); var co = $("#checkout"); if (co) { co.href = "https://" + SHOP + "/cart/" + VARIANTS[sku] + ":" + qty; co.hidden = !VARIANTS[sku] || qty >= tier2; } $$(".pricebox tr").forEach(function (tr) { var min = parseInt(tr.getAttribute("data-min"), 10); if (!isNaN(min)) tr.classList.toggle("on", qty >= min && qty < parseInt(tr.getAttribute("data-max"), 10)); }); if (ups) ups.hidden = qty < hint; $$(".mini[data-sync] .add-bundle").forEach(function (b) { b.setAttribute("data-qty", qty); }); samenUpd(); };
+    /* afdekraam-keuze (20 nov 2026): schakelmateriaal zonder raam krijgt een duidelijke keuze bij de koopknop */
+    var FR = window.LP_FRAMES || null, frN = 1;
+    var FRL = { none: { nl: "Zonder afdekraam", en: "No cover frame", de: "Ohne Abdeckrahmen" }[LANG], g: { nl: "-voudig", en: "-gang", de: "-fach" }[LANG], warn: { nl: "Let op: zonder afdekraam kunt u het artikel niet monteren.", en: "Note: the item cannot be fitted without a cover frame.", de: "Hinweis: ohne Abdeckrahmen ist keine Montage möglich." }[LANG] };
+    var frInfo = function () { return FR && FR[sku] ? FR[sku] : null; };
+    var frPick = function () { var f = frInfo(); if (!f || !frN) return null; var o = f.opts.filter(function (x) { return x.n === frN; })[0]; return o ? { o: o, q: Math.ceil(qty * f.mul / o.n) } : null; };
+    var frCost = function () { var f = frPick(); return f ? f.o.p * f.q : 0; };
+    var frCart = function () { var f = frPick(); return f && VARIANTS[f.o.sku] ? "," + VARIANTS[f.o.sku] + ":" + f.q : ""; };
+    var frSum = function () { var el = $("#fc-sum"); if (!el) return; var f = frPick(); el.innerHTML = f ? "+ " + f.q + "x " + esc(f.o.name) + " (" + esc(f.o.c) + ") = <b>" + eur(f.o.p * f.q) + "</b>" : FRL.warn; el.classList.toggle("warn", !f); };
+    var frRender = function () { var box = $("#framechoice"); if (!box) return; var f = frInfo(); box.hidden = !f; if (!f) return; $("#fc-col").textContent = f.col; if (frN && !f.opts.some(function (o) { return o.n === frN; })) frN = f.opts[0].n;
+      $("#fc-opts").innerHTML = '<button type="button" class="opt-btn' + (frN === 0 ? " on" : "") + '" data-n="0">' + FRL.none + "</button>" + f.opts.map(function (o) { return '<button type="button" class="opt-btn' + (frN === o.n ? " on" : "") + '" data-n="' + o.n + '">' + o.n + FRL.g + " · " + eur(o.p) + "</button>"; }).join("");
+      $$("#fc-opts .opt-btn").forEach(function (b) { b.addEventListener("click", function () { frN = parseInt(b.getAttribute("data-n"), 10); frRender(); upd(); }); }); frSum(); };
+    var addAll = function () { addQ(sku, qty); var f = frPick(); if (f) addQ(f.o.sku, f.q); };
+    var upd = function () { out.value = qty; if (sub) sub.textContent = isNaN(price) ? T.req : (qty >= tier2 ? T.proj : eur(price * qty + frCost())); var co = $("#checkout"); if (co) { var fp = frPick(); co.href = "https://" + SHOP + "/cart/" + VARIANTS[sku] + ":" + qty + frCart(); co.hidden = !VARIANTS[sku] || qty >= tier2 || (fp && !VARIANTS[fp.o.sku]); } frSum(); $$(".pricebox tr").forEach(function (tr) { var min = parseInt(tr.getAttribute("data-min"), 10); if (!isNaN(min)) tr.classList.toggle("on", qty >= min && qty < parseInt(tr.getAttribute("data-max"), 10)); }); if (ups) ups.hidden = qty < hint; $$(".mini[data-sync] .add-bundle").forEach(function (b) { b.setAttribute("data-qty", qty); }); samenUpd(); };
     var samenUpd = function () { var any = false; $$(".samen[data-for]").forEach(function (g) { var on = g.getAttribute("data-for") === sku; g.hidden = !on; if (!on) return; any = true; var mu = parseInt(g.getAttribute("data-mult"), 10) || 1, fr = g.getAttribute("data-frame"); $$(".add-bundle", g).forEach(function (b) { b.setAttribute("data-qty", b.getAttribute("data-sku") === fr ? qty * mu : mu); }); var go = $(".samen-go", g); if (go) { go.hidden = !(VARIANTS[sku] && VARIANTS[fr]) || qty >= tier2; go.href = "https://" + SHOP + "/cart/" + VARIANTS[sku] + ":" + qty + "," + VARIANTS[fr] + ":" + (qty * mu); } }); var w = $("#samen"); if (w) w.hidden = !any; };
     var minus = $("#min"), plus = $("#plus");
     if (minus) minus.addEventListener("click", function () { qty = Math.max(moq, qty - step); upd(); });
     if (plus) plus.addEventListener("click", function () { qty = maxq ? Math.min(maxq, qty + step) : qty + step; upd(); });
     out.addEventListener("change", function () { var v = norm(out.value, moq); if (maxq && v > maxq) v = maxq; if (packEl) packEl.hidden = moq <= 1; qty = v; upd(); });
     out.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); out.blur(); } });
-    var add = $("#add"); if (add) add.addEventListener("click", function () { addQ(sku, qty); });
-    var quick = $("#quick"); if (quick) quick.addEventListener("click", function () { addQ(sku, qty); location.href = P + "/offerte/"; });
+    var add = $("#add"); if (add) add.addEventListener("click", function () { addAll(); });
+    var quick = $("#quick"); if (quick) quick.addEventListener("click", function () { addAll(); location.href = P + "/offerte/"; });
     document.body.classList.add("has-sticky");
     var go = $("#upsell-go"); if (go) go.addEventListener("click", function () { addQ(sku, qty); location.href = P + "/offerte/?project=1"; });
     var pr = $("#print"); if (pr) pr.addEventListener("click", function () { window.print(); });
@@ -256,6 +268,7 @@
           b.classList.toggle("dim", !FAMD.v.some(function (x) { return matches(x, sel); }));
         });
         if (push && history.replaceState) { var u = new URL(location.href); u.searchParams.set("v", sku); history.replaceState(null, "", u.toString()); }
+        frRender();
         upd();
       };
       $$(".opt-btn", pdp).forEach(function (b) {
@@ -270,9 +283,10 @@
       var want = new URLSearchParams(location.search).get("v");
       setV(bySku[want] || bySku[sku] || FAMD.v[0], false);
     }
+    frRender();
     var st = $("#sticky-buy"), sa = $("#sticky-add"), act = $(".actions");
     if (st && act && "IntersectionObserver" in window) { new IntersectionObserver(function (es) { st.classList.toggle("show", !es[0].isIntersecting && es[0].boundingClientRect.top < 0); }).observe(act); }
-    if (sa) sa.addEventListener("click", function () { addQ(sku, qty); });
+    if (sa) sa.addEventListener("click", function () { addAll(); });
     $$(".add-all").forEach(function (b) { b.addEventListener("click", function () { addQ(sku, qty); var first = $('.minis[data-group="' + b.getAttribute("data-group") + '"] .mini'); if (first) { addQ(first.getAttribute("data-sku"), qty, parseInt(first.getAttribute("data-moq"), 10) || 1); } location.href = P + "/offerte/"; }); });
     upd();
     function bindThumbs() {

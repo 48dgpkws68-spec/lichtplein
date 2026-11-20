@@ -646,3 +646,12 @@ table.snel td:first-child{width:auto}
   html{scroll-padding-top:150px}
 }
 @media (min-width:1081px) and (max-width:1260px){.nav{gap:1rem;font-size:13.5px}}
+
+/* 20 nov 2026: afdekraam-keuze bij de koopknop */
+.framechoice{margin:1rem 0 .4rem;padding:1rem 1.1rem;border:1px solid rgba(61,139,255,.45);border-radius:14px;background:rgba(61,139,255,.07)}
+.framechoice h4{margin:0 0 .35rem;font-size:15px;color:#fff}
+.framechoice .fc-note{margin:0 0 .7rem;font-size:13.5px;color:var(--ink2)}
+.framechoice .fc-note b{color:#fff}
+.framechoice .fc-sum{margin:.7rem 0 0;font-size:13.5px;color:var(--ink2)}
+.framechoice .fc-sum b{color:#fff}
+.framechoice .fc-sum.warn{color:#ffb547}
