@@ -655,3 +655,14 @@ table.snel td:first-child{width:auto}
 .framechoice .fc-sum{margin:.7rem 0 0;font-size:13.5px;color:var(--ink2)}
 .framechoice .fc-sum b{color:#fff}
 .framechoice .fc-sum.warn{color:#ffb547}
+/* seo-gap 24 nov 2026: dimsectie QUADRA en auteursregel */
+.dimbaar{margin-top:3rem;max-width:none}
+.dimtab-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:.8rem}
+.dimtab{width:100%;min-width:640px;border-collapse:collapse;font-size:14px}
+.dimtab th,.dimtab td{text-align:left;padding:.65rem .5rem;border-bottom:1px solid var(--hair);vertical-align:top}
+.dimtab th{color:#fff;font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.dimtab td{color:var(--ink2)}
+.dimtab td b{color:#fff}
+.dimbaar ol{padding-left:1.2rem}
+@media print{.dimtab td,.dimtab th{color:#000}}
+.dimtab td:last-child{min-width:230px}
