@@ -374,6 +374,7 @@
         var wantProj = big || tot0 >= 2500 || new URLSearchParams(location.search).get("project") === "1";
         if (pj) pj.hidden = !wantProj;
         var opm = $("#f5"); if (wantProj && opm && !opm.value) opm.value = T.note;
+        if (opm && !opm.value && new URLSearchParams(location.search).get("set") === "1") opm.value = { nl: "Lichtpunt-set(s): graag met setkorting.", en: "Lighting point set(s): please apply the set discount.", de: "Lichtpunkt-Set(s): bitte mit Set-Rabatt." }[LANG];
         suggest(rows, by);
         var total = 0, lines = [];
         list.innerHTML = rows.map(function (i) {
@@ -465,4 +466,58 @@
     var tick = function (ts) { if (!t0) t0 = ts; var k = Math.min(1, (ts - t0) / 1400); var v = Math.round(to * (1 - Math.pow(1 - k, 3))); el.textContent = v.toLocaleString(LOC) + suf; if (k < 1) requestAnimationFrame(tick); };
     if ("IntersectionObserver" in window) { var o = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { requestAnimationFrame(tick); o.disconnect(); } }); o.observe(el); } else el.textContent = to + suf;
   });
+  // ---------------------------------------------------------------- lichtpunt-sets (26 nov 2026)
+  (function () {
+    var D = window.LP_SETS, box = $("#lpset"); if (!D || !box) return;
+    var lab = {}; try { lab = JSON.parse(box.getAttribute("data-lab") || "{}"); } catch (e) {}
+    var st = { mast: D.mast[0] || null, arm: null, kast: D.kast[0], n: 1 }, nIn = $("#lps-n");
+    function ht() { return st.mast ? D.h[st.mast] : null; }
+    function armOk(s) { var h = ht(); return !h || (D.arm[String(h)] || []).indexOf(s) >= 0; }
+    if (st.mast) st.arm = (D.arm[String(ht())] || [])[0] || null;
+    function lines() {
+      if (!st.mast || !st.arm) return null;
+      var k = st.kast === "LP-NX101" ? 2 : 1;
+      return [[st.mast, 1], [st.arm, 1], [st.kast, 1], [D.zek, k], [D.kop, k], [D.aard, 1]].filter(function (x) { return x[0] && D.items[x[0]]; });
+    }
+    function draw() {
+      $$(".lps-opt[data-mast]", box).forEach(function (b) { var on = b.getAttribute("data-mast") === st.mast; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+      $$(".lps-opt[data-arm]", box).forEach(function (b) { var s = b.getAttribute("data-arm"); b.hidden = !armOk(s); b.classList.toggle("on", s === st.arm); b.setAttribute("aria-pressed", s === st.arm); });
+      $$("[data-kast]", box).forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-kast") === st.kast); });
+      var an = $("#lps-armnote"); if (an && lab.arm6) { if (!an.getAttribute("data-def")) an.setAttribute("data-def", an.textContent); an.textContent = ht() === 6 ? lab.arm6 : an.getAttribute("data-def"); }
+      var L = lines(), wrap = $("#lps-lines"), tot = $("#lps-tot"), ship = $("#lps-ship"), buy = $("#lps-buy"), q = $("#lps-quote"), veel = $("#lps-veel");
+      if (!L) { wrap.innerHTML = '<p class="soft">' + esc(lab.kies || "") + "</p>"; tot.innerHTML = ""; ship.textContent = ""; buy.hidden = true; q.disabled = true; veel.hidden = true; return; }
+      var sum = 0;
+      wrap.innerHTML = '<table class="lps-tab">' + L.map(function (x) { var it = D.items[x[0]], line = it.p * x[1]; sum += line; return "<tr><td>" + x[1] + "&times;</td><td><a href=\"" + it.u + "\">" + esc(it.k) + "</a><small>" + esc(it.c) + "</small></td><td>" + eur(line) + "</td></tr>"; }).join("") + "</table>";
+      var disc = Math.round(sum * D.korting) / 100, per = Math.round((sum - disc) * 100) / 100, n = st.n;
+      tot.innerHTML = "<div><span>" + esc(lab.sum) + "</span><s>" + eur(sum) + "</s></div><div class=\"k\"><span>" + esc(lab.korting) + "</span><b>&minus; " + eur(disc) + "</b></div><div class=\"p\"><span>" + esc(lab.per) + "</span><b>" + eur(per) + "</b></div>" + (n > 1 ? "<div class=\"t\"><span>" + n + " &times; " + esc(lab.tot) + "</span><b>" + eur(per * n) + "</b></div>" : "");
+      ship.textContent = (lab.ship || "").replace("{v}", eur(D.ship[String(ht())])).replace("{h}", ht());
+      var many = n > D.max; veel.hidden = !many;
+      var ids = L.map(function (x) { return VARIANTS[x[0]] ? VARIANTS[x[0]] + ":" + (x[1] * n) : null; });
+      var ok = ids.every(Boolean) && !many;
+      buy.hidden = !ok; if (ok) buy.href = "https://" + SHOP + "/cart/" + ids.join(",") + "?discount=" + encodeURIComponent(D.code);
+      q.disabled = false;
+    }
+    box.addEventListener("click", function (ev) {
+      var b = ev.target.closest("[data-mast],[data-arm],[data-kast]"); if (!b) return;
+      if (b.hasAttribute("data-mast")) { st.mast = b.getAttribute("data-mast"); if (!st.arm || !armOk(st.arm)) st.arm = (D.arm[String(ht())] || [])[0] || null; }
+      else if (b.hasAttribute("data-arm")) st.arm = b.getAttribute("data-arm");
+      else st.kast = b.getAttribute("data-kast");
+      draw();
+    });
+    function setN(v) { st.n = Math.max(1, parseInt(v, 10) || 1); if (nIn) nIn.value = st.n; draw(); }
+    if (nIn) nIn.addEventListener("change", function () { setN(nIn.value); });
+    var mi = $("#lps-min"), pl = $("#lps-plus");
+    if (mi) mi.addEventListener("click", function () { setN(st.n - 1); });
+    if (pl) pl.addEventListener("click", function () { setN(st.n + 1); });
+    var qb = $("#lps-quote");
+    if (qb) qb.addEventListener("click", function () {
+      var L = lines(); if (!L) return;
+      var it = readQ();
+      L.forEach(function (x) { var qty = x[1] * st.n, ex = it.filter(function (i) { return i.sku === x[0]; })[0]; if (ex) ex.qty += qty; else it.push({ sku: x[0], qty: qty }); });
+      writeQ(it); toast(T.added);
+      location.href = P + "/offerte/?" + (st.n > D.max ? "project=1" : "set=1");
+    });
+    draw();
+  })();
+
 })();
