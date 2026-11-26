@@ -202,7 +202,7 @@
   if (pdp) {
     var sku = pdp.getAttribute("data-product"), price = parseFloat(pdp.getAttribute("data-prijs")), moq = parseInt(pdp.getAttribute("data-moq"), 10) || 1, step = parseInt(pdp.getAttribute("data-step"), 10) || 1;
     var out = $("#qty"), sub = $("#subtotaal"), qty = moq, packEl = $("#pack");
-    var tier2 = parseInt(pdp.getAttribute("data-tier2"), 10) || 100, hint = parseInt(pdp.getAttribute("data-hint"), 10) || 10, ups = $("#upsell-qty");
+    var tier2 = parseInt(pdp.getAttribute("data-tier2"), 10) || 100, hint = parseInt(pdp.getAttribute("data-hint"), 10) || 10, ups = $("#upsell-qty"), shipmax = parseInt(pdp.getAttribute("data-shipmax"), 10) || 0;
     var maxq = parseInt(pdp.getAttribute("data-max"), 10) || 0; /* outlet: niet meer dan de voorraad */
     /* afdekraam-keuze (20 nov 2026): schakelmateriaal zonder raam krijgt een duidelijke keuze bij de koopknop */
     var FR = window.LP_FRAMES || null, frN = 1;
@@ -216,7 +216,7 @@
       $("#fc-opts").innerHTML = '<button type="button" class="opt-btn' + (frN === 0 ? " on" : "") + '" data-n="0">' + FRL.none + "</button>" + f.opts.map(function (o) { return '<button type="button" class="opt-btn' + (frN === o.n ? " on" : "") + '" data-n="' + o.n + '">' + o.n + FRL.g + " · " + eur(o.p) + "</button>"; }).join("");
       $$("#fc-opts .opt-btn").forEach(function (b) { b.addEventListener("click", function () { frN = parseInt(b.getAttribute("data-n"), 10); frRender(); upd(); }); }); frSum(); };
     var addAll = function () { addQ(sku, qty); var f = frPick(); if (f) addQ(f.o.sku, f.q); };
-    var upd = function () { out.value = qty; if (sub) sub.textContent = isNaN(price) ? T.req : (qty >= tier2 ? T.proj : eur(price * qty + frCost())); var co = $("#checkout"); if (co) { var fp = frPick(); co.href = "https://" + SHOP + "/cart/" + VARIANTS[sku] + ":" + qty + frCart(); co.hidden = !VARIANTS[sku] || qty >= tier2 || (fp && !VARIANTS[fp.o.sku]); } frSum(); $$(".pricebox tr").forEach(function (tr) { var min = parseInt(tr.getAttribute("data-min"), 10); if (!isNaN(min)) tr.classList.toggle("on", qty >= min && qty < parseInt(tr.getAttribute("data-max"), 10)); }); if (ups) ups.hidden = qty < hint; $$(".mini[data-sync] .add-bundle").forEach(function (b) { b.setAttribute("data-qty", qty); }); samenUpd(); };
+    var upd = function () { out.value = qty; if (sub) sub.textContent = isNaN(price) ? T.req : (qty >= tier2 ? T.proj : eur(price * qty + frCost())); var co = $("#checkout"); if (co) { var fp = frPick(); co.href = "https://" + SHOP + "/cart/" + VARIANTS[sku] + ":" + qty + frCart(); co.hidden = !VARIANTS[sku] || qty >= tier2 || (shipmax && qty > shipmax) || (fp && !VARIANTS[fp.o.sku]); } var sn = $("#ship-note"); if (sn) sn.hidden = !(shipmax && qty > shipmax); frSum(); $$(".pricebox tr").forEach(function (tr) { var min = parseInt(tr.getAttribute("data-min"), 10); if (!isNaN(min)) tr.classList.toggle("on", qty >= min && qty < parseInt(tr.getAttribute("data-max"), 10)); }); if (ups) ups.hidden = qty < hint; $$(".mini[data-sync] .add-bundle").forEach(function (b) { b.setAttribute("data-qty", qty); }); samenUpd(); };
     var samenUpd = function () { var any = false; $$(".samen[data-for]").forEach(function (g) { var on = g.getAttribute("data-for") === sku; g.hidden = !on; if (!on) return; any = true; var mu = parseInt(g.getAttribute("data-mult"), 10) || 1, fr = g.getAttribute("data-frame"); $$(".add-bundle", g).forEach(function (b) { b.setAttribute("data-qty", b.getAttribute("data-sku") === fr ? qty * mu : mu); }); var go = $(".samen-go", g); if (go) { go.hidden = !(VARIANTS[sku] && VARIANTS[fr]) || qty >= tier2; go.href = "https://" + SHOP + "/cart/" + VARIANTS[sku] + ":" + qty + "," + VARIANTS[fr] + ":" + (qty * mu); } }); var w = $("#samen"); if (w) w.hidden = !any; };
     var minus = $("#min"), plus = $("#plus");
     if (minus) minus.addEventListener("click", function () { qty = Math.max(moq, qty - step); upd(); });
@@ -385,7 +385,8 @@
         if (hidden) hidden.value = lines.join("\n");
         if (totIn) totIn.value = eur(total) + ({ nl: " excl. btw", en: " excl. VAT", de: " zzgl. MwSt." }[LANG]);
         var ids = rows.filter(function (i) { return VARIANTS[i.sku]; }).map(function (i) { return VARIANTS[i.sku] + ":" + i.qty; });
-        var allOk = ids.length === rows.length && !big;
+        var m4 = 0, m6 = 0; rows.forEach(function (i) { if (/^LP-TU10[12]$/.test(i.sku)) m4 += i.qty; if (/^LP-TU10[34]$/.test(i.sku)) m6 += i.qty; });
+        var allOk = ids.length === rows.length && !big && m4 <= 10 && m6 <= 10; // verzending masten: 170/210 euro per zending van 1 t/m 10 (26 nov 2026)
         var co = $("#q-checkout"); if (co) { co.hidden = !allOk; co.href = "https://" + SHOP + "/cart/" + ids.join(","); }
         var cn = $("#q-chk-note"); if (cn) cn.hidden = allOk || !ids.length;
         $$("input[data-sku]", list).forEach(function (inp) { inp.addEventListener("change", function () { var v = norm(inp.value, by[inp.getAttribute("data-sku")].m); writeQ(readQ().map(function (x) { return x.sku === inp.getAttribute("data-sku") ? { sku: x.sku, qty: v } : x; })); draw(); }); });

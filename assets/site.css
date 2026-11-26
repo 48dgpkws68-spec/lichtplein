@@ -404,6 +404,7 @@ html{overflow-x:clip;scroll-padding-top:100px}
 @media (max-width:600px){.app-grid{grid-template-columns:repeat(2,1fr)}.app-tile{padding:.9rem}}
 .steps.how{grid-template-columns:repeat(3,1fr)}
 .steps.how h3{margin:.4rem 0 .3rem;font-size:1.05rem}
+.ship-note{margin:.7rem 0 0;font-size:.88rem;color:var(--ink2)}
 .upsell{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1rem;padding:.9rem 1rem;border:1px solid rgba(61,139,255,.45);border-radius:12px;background:var(--neon-soft)}
 .upsell b{display:block;color:#fff;font-size:14px}
 .upsell span{font-size:13px;color:var(--ink2)}
