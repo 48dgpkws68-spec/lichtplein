@@ -402,6 +402,15 @@
     draw();
     if (form) form.addEventListener("submit", function () { setTimeout(function () { writeQ([]); }, 800); });
   }
+  /* ---- korte aanvraag op lege offertelijst (27 nov 2026) ---- */
+  var qk = $("#qkort"); if (qk) qk.addEventListener("submit", function () { try { if (window.umami && umami.track) umami.track("offerte-kort", { taal: LANG }); } catch (e) {} });
+  /* ---- rem tegen scripts: formulier binnen 3 s na laden of met gevuld controleveld gaat niet weg en telt niet mee ---- */
+  var T0 = Date.now();
+  window.addEventListener("submit", function (e) {
+    var f = e.target; if (!f || !/formsubmit\.co/.test(f.getAttribute("action") || "")) return;
+    var h = f.querySelector('input[name="_honey"]');
+    if (Date.now() - T0 < 3000 || (h && h.value)) { e.preventDefault(); e.stopImmediatePropagation(); }
+  }, true);
   if (new URLSearchParams(location.search).get("verzonden")) { var n = $("#verzonden"); if (n) n.hidden = false; }
 
   /* ---- beweging: sterrenveld, parallax, tilt, stagger ---- */
